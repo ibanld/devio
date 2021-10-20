@@ -19,6 +19,6 @@ router.post('/', orders.addUser)
 //  @route      PUT /api/orders/:id
 //  @access     public
 //  @desc       Update order
-router.put('/:id', verifyToken, orders.updateUser)
+router.put('/:id', orders.updateUser)
 
 module.exports = router
