@@ -14,7 +14,7 @@ const io = new Server(httpServer)
 const PORT = process.env.PORT || 3000
 
 // Testamo conexao com o banco de dados
-dbConnect
+dbConnect()
 
 // Abrimos socket para conxao com o cliente
 io.on("connection", (socket) => {  
