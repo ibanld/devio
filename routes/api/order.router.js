@@ -14,11 +14,11 @@ router.get('/:id', orders.findOne)
 //  @route      POST /api/orders
 //  @access     public
 //  @desc       Save new order
-router.post('/', orders.addUser)
+router.post('/', orders.addOrder)
 
 //  @route      PUT /api/orders/:id
 //  @access     public
 //  @desc       Update order
-router.put('/:id', orders.updateUser)
+router.put('/:id', orders.updateOrder)
 
 module.exports = router

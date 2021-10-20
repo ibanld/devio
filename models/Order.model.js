@@ -20,15 +20,12 @@ const orderSchema = new Schema({
     },
     payment: {
         type: Number,
-        required: true
     },
     paymentMethod: {
         type: Boolean,
-        required: true
     },
     paymentChange: {
         type: Number,
-        required: true,
         default: 0
     },
     completed: {
