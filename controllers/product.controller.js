@@ -41,7 +41,7 @@ exports.getOne = async (req, res) => {
         if (findProduct) {
             return res.send({ 
                 message: 'Produto carregado',
-                data: findProducts
+                data: findProduct
             })
         }
     } catch (err) {
