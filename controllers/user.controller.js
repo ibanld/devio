@@ -27,13 +27,13 @@ exports.addUser = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { user, password } = req.body
-        const findUser = await User.find({ user: user })
+        const findUser = await User.findOne({user: user})
         if (findUser) {
             const checkPassword = bcrypt.compareSync(password, findUser.password)
             if (checkPassword) {
                 return res.send({
                     message: 'Login deu certo!',
-                    data: findUser.data
+                    data: findUser
                 })
             } else {
                 return res.send({
@@ -71,7 +71,7 @@ exports.getUser = async (req, res) => {
         if (findUser) {
             return res.send({
                 message: 'Usuario carregado',
-                data: findUser.data
+                data: findUser
             })
         }
     } catch (err) {

@@ -25,3 +25,5 @@ router.get('/:id', users.getUser)
 //  @access     public
 //  @desc       Delete User by ID
 router.delete('/:id', users.deleteUser)
+
+module.exports = router
