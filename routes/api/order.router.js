@@ -21,4 +21,9 @@ router.post('/', orders.addOrder)
 //  @desc       Update order
 router.put('/:id', orders.updateOrder)
 
+//  @route      DELETE /api/orders/:id
+//  @access     public
+//  @desc       Delete order by ID
+router.delete('/:id', orders.deleteOrder)
+
 module.exports = router

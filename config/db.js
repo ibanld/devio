@@ -3,10 +3,13 @@ require('dotenv').config()
 
 const URI = process.env.MONGO_DB_URI
 
+// conexao com o banco de dados
+const connect = mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
+
 const dbConnect = async () => {
     try {
-        const connect = await mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
-        if (connect) {
+        const connection = await connect
+        if (connection) {
             console.log('Connect with Database via Mongoose')
         }
     } catch (err) {
@@ -14,4 +17,4 @@ const dbConnect = async () => {
     }
 }
 
-module.exports = dbConnect
+module.exports = { connect, dbConnect }

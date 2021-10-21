@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+const mongoose = require("mongoose")
 const { Schema } = mongoose
 
 const orderSchema = new Schema({
@@ -19,13 +19,20 @@ const orderSchema = new Schema({
         required: true
     },
     payment: {
-        type: Number,
+        type: Boolean,
+        required: true,
+        default: false
     },
     paymentMethod: {
         type: Boolean,
     },
     paymentChange: {
         type: Number,
+        default: 0
+    },
+    total : {
+        type: Number,
+        required: true,
         default: 0
     },
     completed: {
