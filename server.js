@@ -35,7 +35,7 @@ io.on("connection", (socket) => {
 
 // Rotas do API
 app.use('/api/orders', require('./routes/api/order.router'))
-//app.use('/api/users', require('./routes/api/user.router'))
+app.use('/api/users', require('./routes/api/user.router'))
 
 // Iniciamos servidor
 httpServer.listen(PORT, () => console.log(`Express-Socket running at PORT: ${PORT}`))
