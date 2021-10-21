@@ -2,6 +2,10 @@ const mongoose = require("mongoose")
 const { Schema } = mongoose
 
 const productSchema = new Schema({
+   ref: {
+       type: String,
+       required: true
+   },
    item: {
        type: String, 
        required: true

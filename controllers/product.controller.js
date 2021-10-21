@@ -2,8 +2,9 @@ const Product = require('../models/Product.model')
 
 exports.addProduct = async (req, res) => {
     try {
-        const { item, family, price } = req.body
+        const { ref, item, family, price } = req.body
         const newProduct = await Product.create({
+            ref: ref,
             item: item,
             family: family,
             price: price,
