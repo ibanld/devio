@@ -64,7 +64,22 @@ exports.getUsers = async (req, res) => {
     }
 }
 
-exports.deleteUsers = async (req, res) => {
+exports.getUser = async (req, res) => {
+    try {
+        const id = req.params.id
+        const findUser = await User.findById(id)
+        if (findUser) {
+            return res.send({
+                message: 'Usuario carregado',
+                data: findUser.data
+            })
+        }
+    } catch (err) {
+        return res.send({message: err.message})
+    }
+}
+
+exports.deleteUser = async (req, res) => {
     try {
         const id = req.params.id
         const delUser = await User.findByIdAndDelete(id)
