@@ -49,6 +49,7 @@ export default function AddInfo({ order }) {
             </Form.Group>
             <Form.Button 
                 primary
+                fluid
                 type="submit"
                 icon="comment"
                 content="Atualizar Informaçao"
