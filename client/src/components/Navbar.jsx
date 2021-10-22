@@ -1,8 +1,9 @@
 import { Menu, Icon, Button } from 'semantic-ui-react'
 
-export default function Navbar({ user, setUser, setOpen }) {
+export default function Navbar({ user, setUser, setOpen, setView }) {
 
     const handleLogout = () => {
+        setView(null)
         setUser(null)
     }
 

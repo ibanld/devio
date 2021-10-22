@@ -23,9 +23,9 @@ export default function MainPage(){
 
     return (
         <>
-        <Navbar user={user} setUser={setUser} setOpen={setOpen} />
+        <Navbar user={user} setUser={setUser} setOpen={setOpen} setView={setView} />
         <Container fluid>
-            {user === null &&
+            {setView === null || user === null &&
                 <LoginForm setUser={setUser} /> 
             }
             {view === 'room' && <WaiterPage user={user} orders={orders} tables={tables} />}
