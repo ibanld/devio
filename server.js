@@ -4,10 +4,12 @@ const bodyParser = require('body-parser')
 const { createServer } = require("http")
 const { Server } = require("socket.io")
 const { dbConnect } = require('./config/db')
+const orders = require('./controllers/order.controller')
 
 // Criamos servidor de Express e httpServer
 const app = express()
 const httpServer = createServer(app)
+
 
 // Iniciamos CORS
 app.use(cors())
@@ -19,7 +21,12 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // Abrimos conexao com Socket.io
-const io = new Server(httpServer)
+const io = new Server(httpServer, {
+    cors: { 
+        origin: "http://localhost:3000",    
+        methods: ["GET", "POST", "PUT"]  
+    }
+})
 
 // Escolhemos PORT do host ou 3000
 const PORT = process.env.PORT || 5000
@@ -29,8 +36,9 @@ dbConnect()
 
 // Abrimos socket para conxao com o cliente
 io.on("connection", (socket) => {  
-    id = socket.id
-    console.log('New income connection' + socket.id)
+    console.log(`Connected with client ${socket.id}`)
+    //const loadOrders = orders.findAll()
+    socket.emit('Hello World')
 })
 
 // Rotas do API

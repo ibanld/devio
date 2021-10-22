@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import LoginForm from '../components/LoginForm'
 import WaiterPage from './WaiterPage'
 import SelectViewModal from '../components/SelectViewModal'
+import { io } from "socket.io-client"
 import { Container } from 'semantic-ui-react'
 
 export default function MainPage(){
@@ -20,6 +21,14 @@ export default function MainPage(){
             setView(null)
         }
     }, [user])
+
+    const socket = io("http://localhost:5000")
+
+    useEffect( () => {
+        socket.on("connect", (socket) => {  
+            console.log(socket)
+        })
+    }, [orders])
 
     return (
         <>
