@@ -87,6 +87,23 @@ exports.updateOrder = async (req, res) => {
                         data: updatedOrder
                     })
                 }
+            case 'PRODUCT_READY': 
+                // Quando um produto no pedido esta pronto para ser pegado da cozinha
+                const productId = req.body.productId
+                const myProduct = order.products.find( product => product._id === productId)
+                const productReady = {
+                    ...myProduct.data,
+                    ready: true
+                }
+                const filterMyProduct = order.products.filter( product => product._id !== productId)
+                filterMyProduct.push(productReady)
+                const updateReadyProductOrder = await Order.findByIdAndUpdate(id, { products: filterMyProduct })
+                if (updateReadyProductOrder) {
+                    return res.send({
+                        message: `${myProduct.item} pronto para pegar`,
+                        data: productReady
+                    })
+                }
             case 'DELETE_PRODUCT':
                 // Excluir produto do pedido
                 const productId = req.body.productId
