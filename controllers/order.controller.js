@@ -173,6 +173,19 @@ exports.updateOrder = async (req, res) => {
                             }
                         })
                     }
+                case 'UPDATE_INFO':
+                    const { customer, comment} = req.body
+                    const updateInfo = await Order.findOneAndUpdate(id, { customer: customer, comment: comment })
+                    if (updateInfo) {
+                        return res.send({
+                            message: `Pedido atualizado`,
+                            data: {
+                                ...order.data,
+                                customer: customer,
+                                comment: comment
+                            }
+                        })
+                    }
             default:
                 return res.send({ message: `Algo nao foi certo atualizando o pedido ${id}` })
         }
