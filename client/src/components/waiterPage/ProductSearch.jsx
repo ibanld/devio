@@ -13,7 +13,7 @@ export default function ProductSearch({ products, order }) {
     const handleSearch = e => {
         setLoadingSearch(true)
         if (e.target.value.length >= 3) {
-            const findProducts = products.filter( product => product.item.includes(e.target.value) || product.ref.toLowerCase().includes(e.target.value.toLowerCase()))
+            const findProducts = products.filter( product => product.item.toLowerCase().includes(e.target.value.toLowerCase()) || product.ref.toLowerCase().includes(e.target.value.toLowerCase()))
             if (findProducts.length > 0) {
                 setSearchedProducts(findProducts)
             }
@@ -58,7 +58,7 @@ export default function ProductSearch({ products, order }) {
                 type="search"
                 onChange={e => handleSearch(e)}
             />
-            {searchedProducts.length < 0 && searchedProducts.map( product => 
+            {searchedProducts.length > 0 && searchedProducts.map( product => 
                 <Label 
                     style={{cursor: 'pointer'}}
                     key={product._id}
