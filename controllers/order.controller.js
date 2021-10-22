@@ -164,7 +164,7 @@ exports.updateOrder = async (req, res) => {
                     const orderPaid = await Order.findByIdAndUpdate(id, { paymentMethod: method, paymentChange: change, payment: true })
                     if (orderPaid) {
                         return res.send({
-                            message: `Pagamento feito para pedido ${id} com ${method ? 'cartao' : 'dinheiro'}`,
+                            message: `Pagamento feito para pedido ${id} com ${!method ? 'cartao' : 'dinheiro'}`,
                             data: {
                                 ...order.data,
                                 paymentMethod: method, 

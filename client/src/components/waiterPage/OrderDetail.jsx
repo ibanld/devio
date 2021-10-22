@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import AddProduct from './AddProduct'
 import AddInfo from './AddInfo'
 import OrderList from './OrderList'
+import OrderPayment from './OrderPayment'
 import { Divider, Container, Button } from 'semantic-ui-react'
-
 
 export default function OrderDetail({ order }) {
     const [showInfo, setShowInfo] = useState('order')
@@ -42,10 +42,11 @@ export default function OrderDetail({ order }) {
                     onClick={  ()=> setShowInfo('payment') }
                 />
             </Button.Group>
+            <Divider />
             {showInfo === 'info' && <AddInfo order={order} />}
             {showInfo === 'order'&& <OrderList order={order} />}
             {showInfo === 'add' && <AddProduct order={order} />}
-            {showInfo === 'payment' && 'pagamento'}
+            {showInfo === 'payment' && <OrderPayment order={order} /> }
         </Container>
         </>
     )
