@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Container } from 'semantic-ui-react'
 import LoginForm from '../components/LoginForm'
+import Navbar from '../components/Navbar'
+import { Container } from 'semantic-ui-react'
 
 export default function MainPage(){
     const [user, setUser] = useState(null)
@@ -11,10 +12,14 @@ export default function MainPage(){
             user.role === 'admin' && setView('admin')
             user.role === 'kitchen' && setView('kitchen')
             user.role === 'room' && setView('room')
+        } else {
+            setView(null)
         }
     }, [user])
 
     return (
+        <>
+        <Navbar user={user} setUser={setUser} />
         <Container fluid>
             {user === null &&
                 <LoginForm setUser={setUser} /> 
@@ -23,5 +28,6 @@ export default function MainPage(){
             {view === 'kitchen' && <h1>kitchen</h1>}
             {view === 'room' && <h1>Room</h1>}
         </Container>
+        </>
     )
 }
