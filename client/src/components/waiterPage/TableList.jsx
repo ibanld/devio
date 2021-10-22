@@ -1,4 +1,5 @@
 import React from 'react'
+import API from '../../utils/axiosUrl'
 import { Button } from 'semantic-ui-react'
 
 const styles = {
@@ -27,6 +28,17 @@ export default function TableList({ orders, order, setOrder, tables, userOrders 
             return 'red'
         }
     }
+
+    const createOrder = async tableNumber => {
+        try {
+            const addOrder = await API.post('/orders', {...order, table: tableNumber})
+            if (addOrder) {
+                setOrder(addOrder.data.data)
+            }
+        } catch (err) {
+            console.error(err)
+        }
+    }
     
     const handleTableSelect = table => {
         const myOrder = orders.filter( order => order.table === table)
@@ -34,6 +46,7 @@ export default function TableList({ orders, order, setOrder, tables, userOrders 
             setOrder(myOrder[0])
         } else {
             setOrder({ ...order, table: table })
+            createOrder(table)
         }
     }
 
