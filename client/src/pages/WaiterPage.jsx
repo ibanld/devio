@@ -21,7 +21,6 @@ function WaiterPage({ user, orders, tables }) {
         }
     }, [orders, user])
 
-
     return (
         <div>
             <TableList 
@@ -33,7 +32,7 @@ function WaiterPage({ user, orders, tables }) {
             />
             {order.table === null ?
                 <InfoPanel /> :
-                <OrderDetail order={order} setOrder={setOrder} />
+                <OrderDetail order={order} />
             }
         </div>
     )
