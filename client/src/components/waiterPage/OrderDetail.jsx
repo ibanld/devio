@@ -2,13 +2,12 @@ import React, { useState } from 'react'
 import AddProduct from './AddProduct'
 import AddInfo from './AddInfo'
 import OrderList from './OrderList'
-import { Menu, Divider, Container, Button } from 'semantic-ui-react'
+import { Divider, Container, Button } from 'semantic-ui-react'
 
 
 export default function OrderDetail({ order }) {
     const [showInfo, setShowInfo] = useState('order')
 
-    //<h5>Mesa {order.table} > R$ {parseFloat(order.total)} > Para {order.customer}</h5>
     return (
         <>
         <Divider />

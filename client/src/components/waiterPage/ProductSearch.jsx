@@ -32,7 +32,7 @@ export default function ProductSearch({ products, order }) {
         try {
             const putIntoOrder = {
                 type: 'ADD_PRODUCT',
-                product: selectedProduct
+                product: {...selectedProduct, ready: false}
             }
             if (selectedProduct.qty > 0){
                 const putOrder = await API.put(`/orders/${order._id}`, putIntoOrder)
