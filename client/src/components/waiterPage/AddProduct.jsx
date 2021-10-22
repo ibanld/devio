@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import API from '../../utils/axiosUrl'
 import ProductSearch from './ProductSearch'
-import { Container, Button } from 'semantic-ui-react'
+import { Button } from 'semantic-ui-react'
 
 export default function AddProduct({ order }) {
     const [showProducts, setShowProducts] = useState(false)

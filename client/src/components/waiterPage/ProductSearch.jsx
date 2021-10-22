@@ -50,6 +50,7 @@ export default function ProductSearch({ products, order }) {
         <div>
             <Input 
                 fluid
+                min="1"
                 icon="search"
                 placeholder="Digite o código ou nome"
                 iconPosition="left"
