@@ -89,8 +89,8 @@ exports.updateOrder = async (req, res) => {
                 }
             case 'PRODUCT_READY': 
                 // Quando um produto no pedido esta pronto para ser pegado da cozinha
-                const productId = req.body.productId
-                const myProduct = order.products.find( product => product._id === productId)
+                const prodId = req.body.productId
+                const myProduct = order.products.find( product => product._id === prodId)
                 const productReady = {
                     ...myProduct.data,
                     ready: true
@@ -174,15 +174,15 @@ exports.updateOrder = async (req, res) => {
                         })
                     }
                 case 'UPDATE_INFO':
-                    const { customer, comment} = req.body
-                    const updateInfo = await Order.findOneAndUpdate(id, { customer: customer, comment: comment })
+                    const { data } = req.body
+                    const updateInfo = await Order.findByIdAndUpdate(id, data )
                     if (updateInfo) {
                         return res.send({
                             message: `Pedido atualizado`,
                             data: {
                                 ...order.data,
-                                customer: customer,
-                                comment: comment
+                                customer: req.body.data.customer,
+                                comment: req.body.data.comment
                             }
                         })
                     }
