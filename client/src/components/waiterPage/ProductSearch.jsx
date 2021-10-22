@@ -58,19 +58,17 @@ export default function ProductSearch({ products, order }) {
                 type="search"
                 onChange={e => handleSearch(e)}
             />
-            {searchedProducts.length < 1 ? 
-                'list of most sold' :
-                searchedProducts.map( product => 
-                    <Label 
-                        style={{cursor: 'pointer'}}
-                        key={product._id}
-                        onClick={ ()=> handleOpenModal(product)}
-                        icon="add"
-                        content={product.item}
-                        detail={`R$ ${product.price}`}
-                        color={getColor(product.family)}
-                    />
-                    )
+            {searchedProducts.length < 0 && searchedProducts.map( product => 
+                <Label 
+                    style={{cursor: 'pointer'}}
+                    key={product._id}
+                    onClick={ ()=> handleOpenModal(product)}
+                    icon="add"
+                    content={product.item}
+                    detail={`R$ ${product.price}`}
+                    color={getColor(product.family)}
+                />
+                )
             }
         </div>
         <ProductConfirmModal 

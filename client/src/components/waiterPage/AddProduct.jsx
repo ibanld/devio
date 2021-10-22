@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import API from '../../utils/axiosUrl'
 import ProductSearch from './ProductSearch'
-import { Button } from 'semantic-ui-react'
+import MostSoldList from './MostSoldList'
+import { Divider } from 'semantic-ui-react'
 
 export default function AddProduct({ order }) {
-    const [showProducts, setShowProducts] = useState(false)
     const [products, setProducts] = useState([])
 
     const loadProducts = async () => {
@@ -24,18 +24,9 @@ export default function AddProduct({ order }) {
 
     return (
         <>
-            {showProducts &&
-                <ProductSearch products={products} order={order} />
-            }
-            <Button 
-                type="button"
-                fluid
-                positive
-                icon="add circle"
-                content="Fazer Pedido"
-                onClick={ ()=> setShowProducts(!showProducts) }
-                attached="bottom"
-            />
+            <ProductSearch products={products} order={order} />
+            <Divider />
+            <MostSoldList products={products} />
         </>
     )
 }
