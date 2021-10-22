@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import TableList from '../components/waiterPage/TableList'
+import InfoPanel from '../components/waiterPage/InfoPanel'
+import OrderDetail from '../components/waiterPage/OrderDetail'
 
 function WaiterPage({ user, orders, tables }) {
     const [order, setOrder] = useState({
@@ -29,7 +31,10 @@ function WaiterPage({ user, orders, tables }) {
                 orders={orders} 
                 userOrders={userOrders}
             />
-            <h2>placeholder new order / edit order</h2>
+            {order.table === null ?
+                <InfoPanel /> :
+                <OrderDetail order={order} setOrder={setOrder} />
+            }
         </div>
     )
 }

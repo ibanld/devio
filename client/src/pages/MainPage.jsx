@@ -9,6 +9,7 @@ export default function MainPage(){
     const [user, setUser] = useState(null)
     const [view, setView] = useState(null)
     const [open, setOpen] = useState(false)
+    //Placeholder values
     const [tables, setTables] = useState([1,2,3,4,5,6,7,8,9,10,11,12,13])
     const [orders, setOrders] = useState([{table: 5, waiter: 'alo'}, {table: 11}, {table: 2, waiter: 'ilopez', comment:'this is an order'}])
 
