@@ -5,6 +5,9 @@ import { Modal, Card, Icon, Header, Button } from 'semantic-ui-react'
 export default function SelectViewModal({ open, setOpen, setView }) {
     return (
         <Modal basic open={open} onClose={ ()=> setOpen(false)}>
+            <Modal.Header>
+                Vamos para
+            </Modal.Header>
             <Modal.Content>
                 <Card.Group centered>
                     <Card color="blue" onClick={ ()=> { setView('room'); setOpen(false) }}>
@@ -36,9 +39,9 @@ export default function SelectViewModal({ open, setOpen, setView }) {
             <Modal.Actions>
                 <Button
                     type="button"
-                    negative
-                    icon="close"
-                    content="Fechar"
+                    primary
+                    icon="chevron left"
+                    content="Voltar"
                     onClick={ ()=> setOpen(false) }
                 />
             </Modal.Actions>
