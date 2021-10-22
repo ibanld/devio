@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
 import { Menu, Icon, Button } from 'semantic-ui-react'
 
-export default function Navbar({ user, setUser }) {
+export default function Navbar({ user, setUser, setOpen }) {
 
     const handleLogout = () => {
         setUser(null)
@@ -12,7 +11,7 @@ export default function Navbar({ user, setUser }) {
             <Menu.Item>Ristorante Cinque Terre</Menu.Item>
             {user !== null && 
                 <Menu.Menu position="right">
-                    <Menu.Item>
+                    <Menu.Item onClick={ () => setOpen(true)}>
                         <Icon
                             name="user"
                         />
