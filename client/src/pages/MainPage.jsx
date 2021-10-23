@@ -8,22 +8,14 @@ import { useOrders, useDispatchOrders } from '../context/ordersContext'
 import { Container } from 'semantic-ui-react'
 
 export default function MainPage(){
-    const [user, setUser] = useState(null)
     const [view, setView] = useState(null)
     const [open, setOpen] = useState(false)
     //Placeholder values
     const [tables, setTables] = useState([1,2,3,4,5,6,7,8,9,10,11,12,13])
 
-    const { orders } = useOrders()
+    const { orders, logged } = useOrders()
     const dispatchOrders = useDispatchOrders()
 
-    useEffect( ()=> {
-        if(user !== null){
-            setView(user.role)
-        } else {
-            setView(null)
-        }
-    }, [user])
 
     const socket = io("http://localhost:5000")
 
@@ -38,12 +30,12 @@ export default function MainPage(){
 
     return (
         <>
-        <Navbar user={user} setUser={setUser} setOpen={setOpen} setView={setView} />
+        <Navbar setOpen={setOpen} setView={setView} />
         <Container fluid>
-            {setView === null || user === null &&
-                <LoginForm setUser={setUser} /> 
+            {!logged &&
+                <LoginForm setView={setView} /> 
             }
-            {view === 'room' && <WaiterPage user={user} tables={tables} />}
+            {view === 'room' && <WaiterPage tables={tables} />}
             {view === 'kitchen' && <h1>kitchen</h1>}
             {view === 'admin' && <h1>Admin</h1>}
         </Container>

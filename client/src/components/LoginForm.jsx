@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import API from '../utils/axiosUrl'
+import { useOrders, useDispatchOrders } from '../context/ordersContext'
 import { Card, Button, Input } from 'semantic-ui-react'
 
-export default function LoginForm({ setUser }) {
+export default function LoginForm({ setView }) {
     const [formUser, setUserForm] = useState({
         user: '',
         password: ''
     })
+
+    const { logged, orders, user } = useOrders
+    const dispatchOrders = useDispatchOrders()
 
     const handleChange = e => {
         setUserForm({
@@ -21,13 +25,31 @@ export default function LoginForm({ setUser }) {
             if (login) {
                 const { message, data } = login.data
                 if (data) {
-                    setUser(data)
+                    dispatchOrders({
+                        type: 'LOG_IN',
+                        payload: data
+                    })
                 }
             }
         } catch (err) {
             console.error(err.message)
         }
     }
+
+
+    useEffect(() => {
+        if (logged) {
+            const myOrders = orders.filter( order => order.waiter === user.user )
+            const currentOrders = myOrders.filter( order => order.payment === false)
+            if (currentOrders.length > 0) {
+                dispatchOrders({
+                    type: 'CURRENT_ORDERS',
+                    payload: currentOrders
+                })
+            }
+        }
+    }, [logged])
+
     return (
         <Card centered>
             <Card.Content>

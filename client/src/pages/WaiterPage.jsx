@@ -1,38 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import TableList from '../components/waiterPage/TableList'
 import InfoPanel from '../components/waiterPage/InfoPanel'
+import { useOrders } from '../context/ordersContext'
 import OrderDetail from '../components/waiterPage/OrderDetail'
 
-function WaiterPage({ user, orders, tables }) {
-    const [order, setOrder] = useState({
-        waiter: user.user,
-        customer: '',
-        table: null,
-        comment: '',
-        products: [],
-        total: 0
-    })
-    const [userOrders, setUserOrders] = useState([])
+function WaiterPage({ tables }) {
 
-    useEffect( ()=> {
-        const myOrders = orders.filter( order => order.waiter === user.user )
-        if(myOrders.length > 0) {
-            setUserOrders(myOrders)
-        }
-    }, [orders, user])
+    const { myOrders } = useOrders()
+
+    // const myOrders = orders.filter( order => order.waiter === user.user )
 
     return (
         <div>
-            <TableList 
-                order={order} 
-                setOrder={setOrder} 
-                tables={tables} 
-                orders={orders} 
-                userOrders={userOrders}
-            />
-            {order.table === null ?
+            <TableList tables={tables} />
+            {myOrders.length < 1 ?
                 <InfoPanel /> :
-                <OrderDetail order={order} />
+                <OrderDetail />
             }
         </div>
     )

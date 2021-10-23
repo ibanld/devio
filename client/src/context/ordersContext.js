@@ -5,7 +5,17 @@ const OrdersDispatchContext = createContext()
 
 const initialState = {
     orders: [],
-    order: {},
+    order: {
+        waiter: '',
+        customer: '',
+        table: null,
+        comment: '',
+        products: [],
+        total: 0
+    },
+    user: {},
+    myOrders: [],
+    logged: false,
     loading: true
 }
 
@@ -23,6 +33,21 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 order: payload
+            }
+        case 'CURRENT_ORDERS':
+            return {
+                ...state,
+                myOrders: payload
+            }
+        case 'LOG_IN':
+            return {
+                ...state,
+                order: {
+                    ...state.order,
+                    user: payload,
+                    waiter: payload.user,
+                    logged: true
+                }
             }
         default:
             throw new Error(`Unknown action: ${action.type}`)

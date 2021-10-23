@@ -5,17 +5,23 @@ import API from '../../utils/axiosUrl'
 import OrderList from './OrderList'
 import OrderPayment from './OrderPayment'
 import { Divider, Container, Button } from 'semantic-ui-react'
+import { useDispatchOrders, useOrders } from '../../context/ordersContext'
 
-export default function OrderDetail({ order }) {
+export default function OrderDetail({ selectedOrder }) {
     const [showInfo, setShowInfo] = useState('order')
-    const [myOrder, setMyOrder] = useState(null)
     
+    const { order } = useOrders()
+    const dispatchOrders = useDispatchOrders()
+
     const getOrder = async (id) => {
         try {
-            const orderUpdated = await API.get(`/orders/${id}`)
-            if (orderUpdated) {
-                console.log(orderUpdated)
-                setMyOrder(orderUpdated.data)
+            const loadOrder = await API.get(`/orders/${id}`)
+            if (loadOrder) {
+                dispatchOrders({
+                    type: 'LOAD_ORDER',
+                    payload: loadOrder
+                })
+                
             }
         } catch (err) {
             console.error(err)
