@@ -52,7 +52,7 @@ exports.login = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
     try {
-        const getUsers = await User.find()
+        const getUsers = await User.find().select("-password")
         if (getUsers) {
             return res.send({
                 message: 'Usuarios carregados',
@@ -67,7 +67,7 @@ exports.getUsers = async (req, res) => {
 exports.getUser = async (req, res) => {
     try {
         const id = req.params.id
-        const findUser = await User.findById(id)
+        const findUser = await User.findById(id).select("-password")
         if (findUser) {
             return res.send({
                 message: 'Usuario carregado',
