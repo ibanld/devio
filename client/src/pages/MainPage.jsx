@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Alert from '../components/Alert'
 import Navbar from '../components/Navbar'
 import LoginForm from '../components/LoginForm'
 import WaiterPage from './WaiterPage'
@@ -39,6 +40,7 @@ export default function MainPage(){
 
     return (
         <>
+        <Alert />
         <Navbar setOpen={setOpen} setView={setView} />
         <Container fluid>
             {!logged ?
