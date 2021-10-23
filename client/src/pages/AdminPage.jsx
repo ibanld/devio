@@ -27,6 +27,13 @@ const ProductsList = ({ products, setReload }) => {
             const newProduct = await API.post('/products/', productForm)
             if (newProduct) {
                 setReload(true)
+                setProductForm({
+                    ref: '',
+                    family: '',
+                    item: '',
+                    price: 0,
+                    sold: 0
+                })
                 dispatchAlert({
                     type: 'SHOW_ALERT',
                     payload: {
@@ -66,7 +73,7 @@ const ProductsList = ({ products, setReload }) => {
 
     return (
         <>
-            <Button compact fluid icon="add" color="teal" content="Adicionar Produto no Cardápio" onClick={()=> setAddProduct(!addProduct)} />
+            <Button compact fluid icon="add circle" color="teal" content="Adicionar Produto no Cardápio" onClick={()=> setAddProduct(!addProduct)} />
             {addProduct ? 
                 <Form onSubmit={e => handleSubmit(e)}>
                     <Form.Group>
@@ -141,9 +148,159 @@ const ProductsList = ({ products, setReload }) => {
     )
 }
 
-const UsersList = () => {
+const UsersList = ({ users, setReload }) => {
+    const [addUser, setAddUser] = useState(false)
+    const [edit, setEdit] = useState(false)
+    const [userForm, setUserForm] = useState({
+        user: '',
+        password: '',
+        fullName: '',
+        role: ''
+    })
+
+    const getRole = role => {
+        switch (role) {
+            case 'room':
+                return 'Sala'
+            case 'kitchen':
+                return 'Cozinha'
+            case 'admin':
+                return 'Gerencia'
+            default:
+                return ''
+        }
+    }
+
+    const dispatchAlert = useDispatchAlert()
+
+    const handleChange = e => {
+        setUserForm({
+            ...userForm,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const handleEdit = user => {
+        setEdit(true)
+        setUserForm(user)
+        setAddUser(true)
+    }
+
+    const handleSubmit = async e => {
+        e.preventDefault()
+        try {
+            if (edit) {
+                const updateUser = await API.put(`/users/${userForm._id}`, userForm)
+                if (updateUser) {
+                    setReload(true)
+                    setUserForm({
+                        user: '',
+                        password: '',
+                        fullName: '',
+                        role: ''
+                    })
+                    dispatchAlert({
+                        type: 'SHOW_ALERT',
+                        payload: {
+                            icon:'thumbs up',
+                            header: 'Usuario Atualizado',
+                            content: `${userForm.fullName} foi atualizado no Sistema`,
+                            positive: true
+                        }
+                    })
+                    setTimeout( ()=> dispatchAlert({type:'HIDE_ALERT'}) , 3000)
+                }
+            } else {
+                const saveUser = await API.post('/users', userForm)
+                if (saveUser) {
+                    setReload(true)
+                    setUserForm({
+                        user: '',
+                        password: '',
+                        fullName: '',
+                        role: ''
+                    })
+                    dispatchAlert({
+                        type: 'SHOW_ALERT',
+                        payload: {
+                            icon:'thumbs up',
+                            header: 'Usuario Adicionado',
+                            content: `${userForm.fullName} foi adicionado ao Sistema`,
+                            positive: true
+                        }
+                    })
+                    setTimeout( ()=> dispatchAlert({type:'HIDE_ALERT'}) , 3000)
+                }
+            }
+        } catch (err) {
+            console.error(err)
+        }
+    }
+    const handleDelUser = async id => {
+        try {
+            const delUser = await API.delete(`/users/${id}`)
+            if (delUser) {
+                setReload(true)
+                dispatchAlert({
+                    type: 'SHOW_ALERT',
+                    payload: {
+                        icon:'trash',
+                        header: 'Usuário Excluido',
+                        content: `O usuário foi exlcuido do sistema`,
+                        positive: false
+                    }
+                })
+                setTimeout( ()=> dispatchAlert({type:'HIDE_ALERT'}) , 3000)
+            }
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
     return (
         <>
+        <Button color="teal" fluid icon="add circle" compact type="button" content="Adicionar Usuario" onClick={ ()=> setAddUser(!addUser) } />
+            {addUser ? 
+            <Form onSubmit={ e => handleSubmit(e)}>
+                <Form.Group>
+                    <Form.Input label="Usuario" placeholder="Digite o usuário" value={userForm.user} name="user" required onChange={e => handleChange(e) } />
+                    <Form.Input label="Nome" placeholder="Digite o nome completo" value={userForm.fullName} name="fullName" required onChange={e => handleChange(e) } />
+                </Form.Group>
+                <Form.Group>
+                    <select required name="family" value={userForm.role} onChange={ e => setUserForm({...userForm, role: e.target.value})}>
+                        <option value="room">Sala</option>
+                        <option value="kitchen">Cozinha</option>
+                        <option value="admin">Gerencia</option>
+                    </select>
+                </Form.Group>
+                <Form.Button type="submit" positive fluid icon={edit ? 'redo' : 'send'} content={edit ? 'Atualizar Usuario' : 'Adicionar Usuario'} />
+            </Form>
+            : 
+            <Table>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Usuário</Table.HeaderCell>
+                        <Table.HeaderCell>Nome</Table.HeaderCell>
+                        <Table.HeaderCell>Emprego</Table.HeaderCell>
+                        <Table.HeaderCell>Açoes</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {users.length > 0 && 
+                    users.map( user => 
+                        <Table.Row key={user._id}>
+                            <Table.Cell>{user.user}</Table.Cell>
+                            <Table.Cell>{user.fullName}</Table.Cell>
+                            <Table.Cell>{getRole(user.role)}</Table.Cell>
+                            <Table.Cell>
+                                <Button circular color="blue" icon="edit" compact onClick={ ()=> handleEdit(user)}/>
+                                <Button circular color="red" icon="trash" compact onClick={ ()=> handleDelUser(user._id)}/>
+                            </Table.Cell>
+                        </Table.Row>        
+                    )}
+                </Table.Body>
+            </Table>
+            }
         </>
     )
 }
