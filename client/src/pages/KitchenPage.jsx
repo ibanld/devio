@@ -22,6 +22,7 @@ export default function KitchenPage() {
                 setProducts(pending)
             }
         }
+        // Update products everytime live server receives an update on ORDERS
     }, [orders])
 // Function to handle products when are ready
     const handleReady = async (product) => {
