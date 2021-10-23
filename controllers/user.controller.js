@@ -90,3 +90,15 @@ exports.deleteUser = async (req, res) => {
         return res.send({message: err.message})
     }
 }
+
+exports.updateUser = async (req, res) => {
+    try {
+        const id = req.params.id
+        const updateUser = await User.findByIdAndUpdate(id. req.body)
+        if (updateUser) {
+            return res.send({ message: `Usuàrio ${req.body.user} foi atualizado`})
+        }
+    } catch (err) {
+        return res.send({message: err.message})
+    }
+}

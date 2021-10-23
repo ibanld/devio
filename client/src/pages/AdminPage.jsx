@@ -193,6 +193,7 @@ const UsersList = ({ users, setReload }) => {
                 const updateUser = await API.put(`/users/${userForm._id}`, userForm)
                 if (updateUser) {
                     setReload(true)
+                    setEdit(false)
                     setUserForm({
                         user: '',
                         password: '',

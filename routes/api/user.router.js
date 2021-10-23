@@ -16,6 +16,11 @@ router.post('/login', users.login)
 //  @desc       Retrieve all users
 router.get('/', users.getUsers)
 
+//  @route      PUT /api/users/:id
+//  @access     public
+//  @desc       Update User
+router.put('/:id', users.updateUser)
+
 //  @route      GET /api/users/:id
 //  @access     public
 //  @desc       Retrieve User
