@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import API from '../../utils/axiosUrl'
 import { Button } from 'semantic-ui-react'
 import requestUpdate from '../../utils/socketUpdate'
@@ -11,6 +12,7 @@ const styles = {
 }
 
 export default function TableList({ tables }) {
+    const [allTables, setAllTables] = useState([])
     const newOrder = {
         customer: '',
         table: null,
@@ -19,30 +21,8 @@ export default function TableList({ tables }) {
         total: 0
     }
 
-    const { orders, myOrders, user } = useOrders()
+    const { orders, user } = useOrders()
     const dispatchOrders = useDispatchOrders()
-
-    const getTableStatus = tableNumber => {
-        if(orders.filter( order => order.table === tableNumber).length > 0) {
-            if (myOrders.filter( order => order.table === tableNumber ).length > 0 ) {
-                return false
-            } else {
-                return true
-            }
-        } else {
-            return false
-        }
-    } 
-
-    const getTableColor = tableNumber => {
-        if (orders.filter( order => order.table === tableNumber).length < 1) {
-            return 'green'
-        } else if (myOrders.filter( order => order.table === tableNumber ).length > 0) {
-            return 'blue'
-        } else {
-            return 'red'
-        }
-    }
 
     const createOrder = async tableNumber => {
         try {
@@ -79,28 +59,42 @@ export default function TableList({ tables }) {
         }
     }
     
-    const handleTableSelect = tableNumber => {
-        if (myOrders.filter( isMyorder => isMyorder.table === tableNumber ).length > 0){
-            let id = myOrders[0]._id
-            console.log(tableNumber, id)
+    const handleTableSelect = isBusy => {
+        if (isBusy._id){
+            let id = isBusy._id
             loadOrder(id)
         } else {
-            createOrder(tableNumber)
+            createOrder(isBusy.table)
         }
     }
+
+
+    useEffect( ()=> {
+        
+        const busyTables = []
+        const emptyTables = []
+        const currentOrders = orders.filter(order => !order.payment)
+
+        currentOrders.map( order => busyTables.push({ ...order, disabled: order.waiter === user.user ? false : true,  color: order.waiter === user.user ? 'blue' : 'red' }))
+        
+        tables.map( table => busyTables.filter( busy => busy.table === table).length < 1 && emptyTables.push({table: table, color: 'green', disabled: false}))
+        
+        setAllTables(busyTables.concat(emptyTables))
+    }, [orders, tables])
 
     return (
         <>
         <h5>Lista de Mesas</h5>
         <div style={styles}>
-            {tables.map( (table, i) => 
+            {allTables.length < 1 ? 'carregando mesas' :
+             allTables.map( (table, i) => 
                 <Button 
-                    key={i}
-                    color={getTableColor(table)}
-                    disabled={getTableStatus(table)}
+                    key={table.table}
+                    color={table.color}
+                    disabled={table.disabled}
                     type="button"
                     circular
-                    content={table}
+                    content={table.table}
                     compact
                     onClick={()=> handleTableSelect(table)}
                 />

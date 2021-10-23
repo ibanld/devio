@@ -40,6 +40,7 @@ exports.addOrder = async (req, res) => {
                     table: table,
                     products: products,
                     total: total,
+                    comment: '', 
                     completed: false
                 })
                 // Informar que o pedido foi criado e retornar pedido

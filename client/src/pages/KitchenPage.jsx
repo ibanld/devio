@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import API from '../utils/axiosUrl'
 import requestUpdate from '../utils/socketUpdate'
-import { useOrders, useDispatchOrders } from '../context/ordersContext'
+import { useOrders } from '../context/ordersContext'
 import { Container, Header, Divider, Button } from 'semantic-ui-react'
 
 export default function KitchenPage() {
@@ -15,7 +15,6 @@ export default function KitchenPage() {
             if (getProducts.length > 0) {
                 const pending = getProducts.filter( product => !product.ready)
                 setProducts(pending)
-                console.log(products)
             }
         }
     }, [orders])
@@ -25,7 +24,6 @@ export default function KitchenPage() {
         try {
             const orderComplete = await API.put(`/orders/${orderId}`, {type: 'PRODUCT_READY', productId: _id})
             if (orderComplete) {
-                console.log(orderComplete)
                 requestUpdate()
 
             }
@@ -40,18 +38,17 @@ export default function KitchenPage() {
             <Divider />
             {products.length > 0 ?
                 products.map( product => 
-                    <>
+                    <div key={product.orderId}>
                     <Button 
-                        key={product._id}
                         type="button"
                         fluid
                         size="massive"
-                        content={`Mesa ${product.table} de ${product.customer} || ${product.item.toUpperCase()} || Quantidade: ${product.qty}`}
+                        content={`Mesa ${product.table} de ${product.customer} || ${product.item.toUpperCase()} || Quantidade: ${product.qty} || ${product.comment}`}
                         color="green"
                         onClick={ ()=> handleReady(product)}
                     /> 
                     <Divider />
-                    </>
+                    </div>
                     ):'Nao ha pedidos pendientes'
             }
         </Container>
