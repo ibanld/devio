@@ -13,7 +13,7 @@ export default function MainPage(){
     //Placeholder values
     const [tables, setTables] = useState([1,2,3,4,5,6,7,8,9,10,11,12,13])
 
-    const { orders, logged, user } = useOrders()
+    const { orders, logged } = useOrders()
     const dispatchOrders = useDispatchOrders()
 
 
@@ -30,14 +30,9 @@ export default function MainPage(){
 
     useEffect(() => {   
         if (logged) {
-            const myOrders = orders.filter( order => order.waiter === user.user )
-            const currentOrders = myOrders.filter( order => order.payment === false)
-            if (currentOrders.length > 0) {
-                dispatchOrders({
-                    type: 'CURRENT_ORDERS',
-                    payload: currentOrders
-                })
-            }
+            dispatchOrders({
+                type: 'CURRENT_ORDERS'
+            })
         }
     }, [logged])
 

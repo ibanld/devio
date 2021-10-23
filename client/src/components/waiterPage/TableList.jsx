@@ -13,7 +13,7 @@ const styles = {
 
 export default function TableList({ tables }) {
 
-    const { orders, myOrders, order } = useOrders()
+    const { orders, myOrders, order, user } = useOrders()
     const dispatchOrders = useDispatchOrders()
 
     const getTableStatus = tableNumber => {
@@ -52,10 +52,11 @@ export default function TableList({ tables }) {
     const loadOrder = async id => {
         try {
             const getOrder = await API.get(`/orders/${id}`)
+            requestUpdate()
             if (getOrder) {
                 dispatchOrders({
                     type: 'LOAD_ORDER',
-                    payload: getOrder
+                    payload: getOrder.data
                 })
             }
         } catch (err) {
@@ -71,7 +72,14 @@ export default function TableList({ tables }) {
         } else {
             dispatchOrders({
                 type: 'LOAD_ORDER',
-                payload: { ...order, table: table }
+                payload: {
+                        customer: '',
+                        waiter: user.user,
+                        comment: '',
+                        products: [],
+                        total: 0,
+                        table: table 
+                    }
             })
             if (order.table !== null) {
                 createOrder(table)

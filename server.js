@@ -35,13 +35,11 @@ dbConnect()
 
 // Abrimos socket para conxao com o cliente
 io.on("connection", (socket) => { 
-    let data
     const broadcast = async () =>  {
         try {
             const getOrder = await findAll()
             if (getOrder) {
-                data = [...getOrder]
-                socket.broadcast.emit("orders", data)
+                socket.broadcast.emit("orders", getOrder)
             }
         } catch (err) {
             console.log(err)

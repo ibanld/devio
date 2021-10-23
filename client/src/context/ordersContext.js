@@ -35,9 +35,11 @@ const reducer = (state = initialState, action) => {
                 order: payload
             }
         case 'CURRENT_ORDERS':
+            const myOrders = state.orders.filter( order => order.waiter === state.user.user )
+            const currentOrders = myOrders.filter( order => order.payment === false)
             return {
                 ...state,
-                myOrders: payload
+                myOrders: currentOrders
             }
         case 'LOG_IN':
             return {

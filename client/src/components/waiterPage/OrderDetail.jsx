@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import AddProduct from './AddProduct'
 import AddInfo from './AddInfo'
-import API from '../../utils/axiosUrl'
 import OrderList from './OrderList'
 import OrderPayment from './OrderPayment'
 import { Divider, Container, Button } from 'semantic-ui-react'
-import { useDispatchOrders, useOrders } from '../../context/ordersContext'
+import { useOrders } from '../../context/ordersContext'
 
 export default function OrderDetail() {
     const [showInfo, setShowInfo] = useState('order')
     
     const { order } = useOrders()
-    const dispatchOrders = useDispatchOrders()
-
+    
     return (
         <>
         <Divider />

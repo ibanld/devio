@@ -5,7 +5,7 @@ exports.findAll = async () => {
         // Procurar todos os pedidos
         const orders = await Order.find()
         if (orders.length < 1) {
-          return  ({message: 'Não foram achados pedidos'})
+          return  []
         } else {
           return orders
         }
