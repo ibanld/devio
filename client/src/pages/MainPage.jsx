@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import LoginForm from '../components/LoginForm'
 import WaiterPage from './WaiterPage'
+import KitchenPage from './KitchenPage'
 import SelectViewModal from '../components/SelectViewModal'
 import { io } from "socket.io-client"
 import { useOrders, useDispatchOrders } from '../context/ordersContext'
@@ -44,7 +45,7 @@ export default function MainPage(){
                 <LoginForm setView={setView} /> :
                 <>
                 {view === 'room' && <WaiterPage tables={tables} />}
-                {view === 'kitchen' && <h1>kitchen</h1>}
+                {view === 'kitchen' && <KitchenPage />}
                 {view === 'admin' && <h1>Admin</h1>}
                 </>
             } 

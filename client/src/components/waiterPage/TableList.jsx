@@ -1,4 +1,3 @@
-import React from 'react'
 import API from '../../utils/axiosUrl'
 import { Button } from 'semantic-ui-react'
 import requestUpdate from '../../utils/socketUpdate'
@@ -12,13 +11,24 @@ const styles = {
 }
 
 export default function TableList({ tables }) {
+    const newOrder = {
+        customer: '',
+        table: null,
+        comment: '',
+        products: [],
+        total: 0
+    }
 
-    const { orders, myOrders, order, user } = useOrders()
+    const { orders, myOrders, user } = useOrders()
     const dispatchOrders = useDispatchOrders()
 
     const getTableStatus = tableNumber => {
-        if(orders.filter( order => order.table === tableNumber).length < 1 || myOrders.filter( order => order.table === tableNumber ).length > 0)  {
-            return true
+        if(orders.filter( order => order.table === tableNumber).length > 0) {
+            if (myOrders.filter( order => order.table === tableNumber ).length > 0 ) {
+                return false
+            } else {
+                return true
+            }
         } else {
             return false
         }
@@ -36,13 +46,18 @@ export default function TableList({ tables }) {
 
     const createOrder = async tableNumber => {
         try {
-            const addOrder = await API.post('/orders', {...order, table: tableNumber})
+            const addOrder = await API.post('/orders', {...newOrder, waiter: user.user, table: tableNumber})
             if (addOrder) {
                 requestUpdate()
                 dispatchOrders({
                     type: 'LOAD_ORDER',
                     payload: addOrder.data.data
                 })
+                setTimeout( ()=>{
+                    dispatchOrders({
+                        type: 'CURRENT_ORDERS'
+                    })
+                } , 300)
             }
         } catch (err) {
             console.error(err)
@@ -64,26 +79,13 @@ export default function TableList({ tables }) {
         }
     }
     
-    const handleTableSelect = table => {
-        const myOrder = orders.filter( order => order.table === table)
-        if(myOrder.length > 0) {
-            const id = myOrder[0]._id
+    const handleTableSelect = tableNumber => {
+        if (myOrders.filter( isMyorder => isMyorder.table === tableNumber ).length > 0){
+            let id = myOrders[0]._id
+            console.log(tableNumber, id)
             loadOrder(id)
         } else {
-            dispatchOrders({
-                type: 'LOAD_ORDER',
-                payload: {
-                        customer: '',
-                        waiter: user.user,
-                        comment: '',
-                        products: [],
-                        total: 0,
-                        table: table 
-                    }
-            })
-            if (order.table !== null) {
-                createOrder(table)
-            }
+            createOrder(tableNumber)
         }
     }
 
@@ -95,7 +97,7 @@ export default function TableList({ tables }) {
                 <Button 
                     key={i}
                     color={getTableColor(table)}
-                    disabled={!getTableStatus(table)}
+                    disabled={getTableStatus(table)}
                     type="button"
                     circular
                     content={table}

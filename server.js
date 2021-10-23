@@ -46,8 +46,7 @@ io.on("connection", (socket) => {
         }
     }
     broadcast()
-    socket.on("updateOrder", () => {
-        console.log('Update')
+    socket.once("updateOrder", () => {
         broadcast()
     })
 })

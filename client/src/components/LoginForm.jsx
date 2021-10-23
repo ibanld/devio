@@ -28,6 +28,9 @@ export default function LoginForm({ setView }) {
                         type: 'LOG_IN',
                         payload: data
                     })             
+                    dispatchOrders({
+                        type: 'CURRENT_ORDERS'
+                    })
                     setView(data.role)  
                 }
             }

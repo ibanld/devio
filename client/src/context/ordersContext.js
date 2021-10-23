@@ -5,14 +5,7 @@ const OrdersDispatchContext = createContext()
 
 const initialState = {
     orders: [],
-    order: {
-        waiter: '',
-        customer: '',
-        table: null,
-        comment: '',
-        products: [],
-        total: 0
-    },
+    order: {},
     user: {},
     myOrders: [],
     logged: false,

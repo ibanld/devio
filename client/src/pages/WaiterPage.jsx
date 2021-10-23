@@ -6,15 +6,12 @@ import OrderDetail from '../components/waiterPage/OrderDetail'
 
 function WaiterPage({ tables }) {
 
-    const { myOrders } = useOrders()
+    const { order } = useOrders()
 
     return (
         <div>
             <TableList tables={tables} />
-            {myOrders.length < 1 ?
-                <InfoPanel /> :
-                <OrderDetail />
-            }
+            {order.hasOwnProperty('_id') ? <OrderDetail /> : <InfoPanel />}
         </div>
     )
 }
