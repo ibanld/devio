@@ -3,8 +3,12 @@ import API from '../utils/axiosUrl'
 import { Container, Divider, Header, Menu, Button, Input, Table, Form } from 'semantic-ui-react'
 import { useDispatchAlert } from '../context/alertsContenxt'
 
+// Products menu child component of Admin Page (see below)
 const ProductsList = ({ products, setReload }) => {
+// Component states
+    // Show add new product child component
     const [addProduct, setAddProduct] = useState(false)
+    // Form state to add new products
     const [productForm, setProductForm] = useState({
         ref: '',
         family: '',
@@ -12,20 +16,23 @@ const ProductsList = ({ products, setReload }) => {
         price: 0,
         sold: 0
     })
+// Alert dispatcher for context (redux alike) 
     const dispatchAlert = useDispatchAlert()
-
+// Controlled inputs change function
     const handleChange = e => {
         setProductForm({
             ...productForm,
             [e.target.name]: e.target.value
         })
     }
-
+// Submit new product form function
     const handleSubmit = async e => {
         e.preventDefault()
         try {
+            // Post to backend API
             const newProduct = await API.post('/products/', productForm)
             if (newProduct) {
+                // if success: fetch again all products/users from database, restore form initial state and show alert to User
                 setReload(true)
                 setProductForm({
                     ref: '',
@@ -49,11 +56,13 @@ const ProductsList = ({ products, setReload }) => {
             console.error(err)
         }
     }
-
+// Function to delete product using product ID
     const handleDelProduct = async id => {
         try {
+            // Call to API with product id to delete it
             const delProd = await API.delete(`/products/${id}`)
             if (delProd) {
+                // if success: fetch again all products/users from database and show alert to User
                 setReload(true)
                 dispatchAlert({
                     type: 'SHOW_ALERT',
@@ -148,9 +157,13 @@ const ProductsList = ({ products, setReload }) => {
     )
 }
 
+// Users menu child component of Admin page (see below)
 const UsersList = ({ users, setReload }) => {
+    //  State to show form for adding new users
     const [addUser, setAddUser] = useState(false)
+    // State to edit existing user or create new
     const [edit, setEdit] = useState(false)
+    // Form inputs state
     const [userForm, setUserForm] = useState({
         user: '',
         password: '',
@@ -158,6 +171,7 @@ const UsersList = ({ users, setReload }) => {
         role: ''
     })
 
+    // Function to translate database value of user role to portuguese
     const getRole = role => {
         switch (role) {
             case 'room':
@@ -171,27 +185,32 @@ const UsersList = ({ users, setReload }) => {
         }
     }
 
+// Alert dispatcher for context (redux alike) 
     const dispatchAlert = useDispatchAlert()
 
+// Controlled inputs change function
     const handleChange = e => {
         setUserForm({
             ...userForm,
             [e.target.name]: e.target.value
         })
     }
-
+// Function to edit an existing user: set edits to TRUE, shows new user form and sets form state to user selected
     const handleEdit = user => {
         setEdit(true)
         setUserForm(user)
         setAddUser(true)
     }
 
+// Function to submit user add/edit form
     const handleSubmit = async e => {
         e.preventDefault()
         try {
+            // if edit is active executes a PUT operation on users API endpoint, otherwise POST user form to endpoint
             if (edit) {
                 const updateUser = await API.put(`/users/${userForm._id}`, userForm)
                 if (updateUser) {
+                    // if success: fetch again all products/users from database, restore form initial state and show alert to User
                     setReload(true)
                     setEdit(false)
                     setUserForm({
@@ -214,6 +233,7 @@ const UsersList = ({ users, setReload }) => {
             } else {
                 const saveUser = await API.post('/users/register', userForm)
                 if (saveUser) {
+                    // if success: fetch again all products/users from database, restore form initial state and show alert to User
                     setReload(true)
                     setUserForm({
                         user: '',
@@ -237,10 +257,13 @@ const UsersList = ({ users, setReload }) => {
             console.error(err)
         }
     }
+// Function to delete user using user ID
     const handleDelUser = async id => {
         try {
+            // Call to API with user id to delete it
             const delUser = await API.delete(`/users/${id}`)
             if (delUser) {
+                // if success: fetch again all products/users from database and show alert to User
                 setReload(true)
                 dispatchAlert({
                     type: 'SHOW_ALERT',
@@ -310,13 +333,22 @@ const UsersList = ({ users, setReload }) => {
 }
 
 function AdminPage({ setTables }) {
+// Component states
+    //  Select what child component is showing
     const [activeItem, setActiveItem] = useState('menu')
+    //  Set parent "tables" state with own state
     const [thisTables, setThisTables] = useState(0)
+    //  State for users from database
     const [users, setUsers] = useState([])
+    //  State for products from database
     const [products, setProducts] = useState([])
+    // State to activate fetch data from API
     const [reload, setReload] = useState(false)
+    
+// Alert dispatcher for context (redux alike) 
     const dispatchAlert = useDispatchAlert()
 
+// Function to change amount of tables available in App (locally)
     const handleSaveTables = () => {
         setTables(thisTables)
         dispatchAlert({
@@ -330,7 +362,7 @@ function AdminPage({ setTables }) {
         })
         setTimeout( ()=> dispatchAlert({type:'HIDE_ALERT'}) , 3000)
     }
-
+// Function to fetch users from database via server (API)
     const loadUsers = async () => {
         try {
             const getUsers = await API.get('/users')
@@ -341,7 +373,7 @@ function AdminPage({ setTables }) {
             console.error(err)
         }
     }
-    
+ // Function to fetch products from database via server (API)   
     const loadProducts = async () => {
         try {
             const getProducts = await API.get('/products')
@@ -353,9 +385,11 @@ function AdminPage({ setTables }) {
         }
     }
 
+// Hooks to retrieve users and products when users/products change or reload state is triggered
     useEffect( ()=> loadUsers() ,[users, reload])
     useEffect( ()=> loadProducts() ,[products, reload])
 
+// Admin page parent component
     return (
         <Container fluid>
             <Header as="h5">Menu de administração</Header>
