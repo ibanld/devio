@@ -2,14 +2,18 @@ import React, { useState } from 'react'
 import API from '../../utils/axiosUrl'
 import { Input, Label } from 'semantic-ui-react'
 import requestUpdate from '../../utils/socketUpdate'
+import { useDispatchAlert } from '../../context/alertsContenxt'
 import ProductConfirmModal from './ProductConfirmModal'
 import getColor from '../../utils/getColor'
+import { useDispatchOrders } from '../../context/ordersContext'
 
 export default function ProductSearch({ products, order }) {
     const [selectedProduct, setSelectedProduct] = useState({})
     const [searchedProducts, setSearchedProducts] = useState([])
     const [loadingSearch, setLoadingSearch] = useState(false)
     const [open, setOpen] = useState(false)
+    
+    const dispatchAlert = useDispatchAlert()
 
     const handleSearch = e => {
         setLoadingSearch(true)
@@ -40,6 +44,18 @@ export default function ProductSearch({ products, order }) {
                 if (putOrder) {
                     requestUpdate()
                     setSelectedProduct({})
+                    setOpen(false)
+                    console.log(putOrder.data)
+                    dispatchAlert({
+                        type: 'SHOW_ALERT',
+                        payload: {
+                            icon:'thumbs up',
+                            header: 'Produto Adicionado!',
+                            content: `${selectedProduct.item} foi adicionado no pedido!`,
+                            positive: true
+                        }
+                    })
+                    setTimeout( ()=> dispatchAlert({type:'HIDE_ALERT'}) , 3000)
                 }
             }
         } catch (err) {

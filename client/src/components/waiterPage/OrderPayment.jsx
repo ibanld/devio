@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import API from '../../utils/axiosUrl'
 import { useDispatchOrders } from '../../context/ordersContext'
+import { useDispatchAlert } from '../../context/alertsContenxt'
 import requestUpdate from '../../utils/socketUpdate'
 import { Button, Input, Divider } from 'semantic-ui-react'
 
@@ -10,6 +11,7 @@ export default function OrderPayment({ order }) {
     const [paymentComplete, setPaymentComplete] = useState(false)
 
     const dispatchOrders = useDispatchOrders()
+    const dispatchAlert = useDispatchAlert()
 
     const handlePayment = async () => {
         try {
@@ -22,7 +24,16 @@ export default function OrderPayment({ order }) {
                     type: 'LOAD_ORDER',
                     payload: {}
                 })
-                console.log(placePayment.data)
+                dispatchAlert({
+                    type: 'SHOW_ALERT',
+                    payload: {
+                        icon:'money',
+                        header: 'Pagamento Completado',
+                        content: `Pagamento de R$ ${order.total} recevido!`,
+                        positive: true
+                    }
+                })
+                setTimeout( ()=> dispatchAlert({type:'HIDE_ALERT'}) , 3000)
             }
         } catch (err) {
             console.error(err)

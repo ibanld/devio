@@ -68,7 +68,6 @@ export default function TableList({ tables }) {
         }
     }
 
-
     useEffect( ()=> {
         const busyTables = []
         const emptyTables = []

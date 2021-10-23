@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import API from '../../utils/axiosUrl'
 import { useDispatchOrders } from '../../context/ordersContext'
+import { useDispatchAlert } from '../../context/alertsContenxt'
 import requestUpdate from '../../utils/socketUpdate'
 import { Form, Divider, Button } from 'semantic-ui-react'
 export default function AddInfo({ order }) {
@@ -10,6 +11,7 @@ export default function AddInfo({ order }) {
     })
 
     const dispatchOrders = useDispatchOrders()
+    const dispatchAlert = useDispatchAlert()
 
     const handleChange = e => {
         setForm({
@@ -31,6 +33,16 @@ export default function AddInfo({ order }) {
                         ...updateOrder.data.data
                     }
                 })
+                dispatchAlert({
+                    type: 'SHOW_ALERT',
+                    payload: {
+                        icon:'info',
+                        header: 'Pedido Atualizado',
+                        content: `Informaçao para pedido ${order._id} foi atualizada!`,
+                        positive: true
+                    }
+                })
+                setTimeout( ()=> dispatchAlert({type:'HIDE_ALERT'}) , 3000)
             }
         } catch (err) {
             console.error(err)

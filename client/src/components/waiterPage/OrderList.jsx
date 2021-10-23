@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import API from '../../utils/axiosUrl'
 import requestUpdate from '../../utils/socketUpdate'
+import { useDispatchAlert } from '../../context/alertsContenxt'
 import { useOrders } from '../../context/ordersContext'
 import { Table, Button } from 'semantic-ui-react'
 
@@ -8,12 +9,23 @@ export default function OrderList() {
     const [thisOrder, setThisOrder] = useState({})
     const { order } = useOrders()
 
+    const dispatchAlert = useDispatchAlert()
+
     const handleDelete = async id => {
         try {
             const deleteProduct = await API.put(`/orders/${id}`, {type: 'DELETE_PRODUCT', productId: id})
             if (deleteProduct) {
                 requestUpdate()
-                console.log(deleteProduct.data)
+                dispatchAlert({
+                    type: 'SHOW_ALERT',
+                    payload: {
+                        icon:'thumbs up',
+                        header: 'Pedido Excluido',
+                        content: `Pedido ${id} foi excluido!`,
+                        positive: false
+                    }
+                })
+                setTimeout( ()=> dispatchAlert({type:'HIDE_ALERT'}) , 3000)
             }
         } catch (err) {
             console.error(err)
