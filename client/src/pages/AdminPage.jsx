@@ -212,7 +212,7 @@ const UsersList = ({ users, setReload }) => {
                     setTimeout( ()=> dispatchAlert({type:'HIDE_ALERT'}) , 3000)
                 }
             } else {
-                const saveUser = await API.post('/users', userForm)
+                const saveUser = await API.post('/users/register', userForm)
                 if (saveUser) {
                     setReload(true)
                     setUserForm({
