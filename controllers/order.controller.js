@@ -95,7 +95,7 @@ exports.updateOrder = async (req, res) => {
                     ...myProduct.data,
                     ready: true
                 }
-                const filterMyProduct = order.products.filter( product => product._id !== productId)
+                const filterMyProduct = order.products.filter( product => product._id !== prodId)
                 filterMyProduct.push(productReady)
                 const updateReadyProductOrder = await Order.findByIdAndUpdate(id, { products: filterMyProduct })
                 if (updateReadyProductOrder) {

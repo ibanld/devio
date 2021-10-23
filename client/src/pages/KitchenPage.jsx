@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import API from '../utils/axiosUrl'
+import requestUpdate from '../utils/socketUpdate'
 import { useOrders, useDispatchOrders } from '../context/ordersContext'
 import { Container, Header, Divider, Button } from 'semantic-ui-react'
 
@@ -10,7 +11,7 @@ export default function KitchenPage() {
     useEffect( ()=> {
         if (orders.length > 0) {
             const getProducts = []
-            orders.map( order => order.products.map( product => getProducts.push({_id: order._id, customer: order.customer, table: order.table, ...product})))
+            orders.map( order => order.products.map( product => getProducts.push({orderId: order._id, customer: order.customer, table: order.table, ...product})))
             if (getProducts.length > 0) {
                 const pending = getProducts.filter( product => !product.ready)
                 setProducts(pending)
@@ -19,8 +20,18 @@ export default function KitchenPage() {
         }
     }, [orders])
 
-    const handleReady = () => {
-        console.log('product ready')
+    const handleReady = async (product) => {
+        const {orderId, _id} = product
+        try {
+            const orderComplete = await API.put(`/orders/${orderId}`, {type: 'PRODUCT_READY', productId: _id})
+            if (orderComplete) {
+                console.log(orderComplete)
+                requestUpdate()
+
+            }
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     return (
@@ -37,7 +48,7 @@ export default function KitchenPage() {
                         size="massive"
                         content={`Mesa ${product.table} de ${product.customer} || ${product.item.toUpperCase()} || Quantidade: ${product.qty}`}
                         color="green"
-                        onClick={ ()=> handleReady()}
+                        onClick={ ()=> handleReady(product)}
                     /> 
                     <Divider />
                     </>
