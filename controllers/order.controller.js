@@ -92,7 +92,7 @@ exports.updateOrder = async (req, res) => {
                 const prodId = req.body.productId
                 const myProduct = order.products.find( product => product._id === prodId)
                 const productReady = {
-                    ...myProduct.data,
+                    ...myProduct,
                     ready: true
                 }
                 const filterMyProduct = order.products.filter( product => product._id !== prodId)
