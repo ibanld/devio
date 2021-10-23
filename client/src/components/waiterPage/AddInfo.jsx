@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import API from '../../utils/axiosUrl'
 import requestUpdate from '../../utils/socketUpdate'
-import { Form } from 'semantic-ui-react'
+import { Form, Divider, Button } from 'semantic-ui-react'
 
 export default function AddInfo({ order }) {
     const [form, setForm] = useState({
         customer: order.customer,
-        comment: ''
+        comment: order.comment
     })
 
     const handleChange = e => {
@@ -22,7 +22,17 @@ export default function AddInfo({ order }) {
             const updateOrder = await API.put(`/orders/${order._id}`, {type: 'UPDATE_INFO', data: form})
             if (updateOrder) {
                 requestUpdate()
-                console.log(updateOrder.data)
+            }
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    const handleDelete = async id => {
+        try {
+            const delItem = await API.delete(`/orders/${id}`)
+            if (delItem) {
+                console.log(delItem.data.message)
             }
         } catch (err) {
             console.error(err)
@@ -30,6 +40,7 @@ export default function AddInfo({ order }) {
     }
 
     return (
+        <>
         <Form onSubmit={e => handleSubmit(e) }>
             <Form.Group widths="equal">
                 <Form.Input 
@@ -57,5 +68,15 @@ export default function AddInfo({ order }) {
                 content="Atualizar Informaçao"
             />
         </Form>
+        <Divider />
+        <Button 
+            type="button"
+            icon="trash"
+            content="Excluir Pedido"
+            onClick={ ()=> handleDelete(order._id)}
+            negative
+            fluid
+        />
+    </>
     )
 }
