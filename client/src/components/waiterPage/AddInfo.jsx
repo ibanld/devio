@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import API from '../../utils/axiosUrl'
+import requestUpdate from '../../utils/socketUpdate'
 import { Form } from 'semantic-ui-react'
 
 export default function AddInfo({ order }) {
@@ -20,6 +21,7 @@ export default function AddInfo({ order }) {
         try {
             const updateOrder = await API.put(`/orders/${order._id}`, {type: 'UPDATE_INFO', data: form})
             if (updateOrder) {
+                requestUpdate()
                 console.log(updateOrder.data)
             }
         } catch (err) {

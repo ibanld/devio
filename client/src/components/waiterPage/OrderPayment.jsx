@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import API from '../../utils/axiosUrl'
+import requestUpdate from '../../utils/socketUpdate'
 import { Button, Input, Divider } from 'semantic-ui-react'
 
 export default function OrderPayment({ order }) {
@@ -11,6 +12,7 @@ export default function OrderPayment({ order }) {
             const placePayment = await API.put(`/orders/${order._id}`, {type: 'PAYMENT_DONE', paymentMethod: cashPayment, paymentChange: cashPayment ? cash - order.total : 0})
             if(placePayment) {
                 setCash(0)
+                requestUpdate()
                 console.log(placePayment.data)
             }
         } catch (err) {

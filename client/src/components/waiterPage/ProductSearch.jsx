@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import API from '../../utils/axiosUrl'
 import { Input, Label } from 'semantic-ui-react'
+import requestUpdate from '../../utils/socketUpdate'
 import ProductConfirmModal from './ProductConfirmModal'
 import getColor from '../../utils/getColor'
 
@@ -37,6 +38,7 @@ export default function ProductSearch({ products, order }) {
             if (selectedProduct.qty > 0){
                 const putOrder = await API.put(`/orders/${order._id}`, putIntoOrder)
                 if (putOrder) {
+                    requestUpdate()
                     setSelectedProduct({})
                 }
             }

@@ -1,5 +1,6 @@
 import React from 'react'
 import API from '../../utils/axiosUrl'
+import requestUpdate from '../../utils/socketUpdate'
 import { Table, Button } from 'semantic-ui-react'
 
 export default function OrderList({ order }) {
@@ -8,6 +9,7 @@ export default function OrderList({ order }) {
         try {
             const deleteProduct = await API.put(`/orders/${id}`, {type: 'DELETE_PRODUCT', productId: id})
             if (deleteProduct) {
+                requestUpdate()
                 console.log(deleteProduct.data)
             }
         } catch (err) {

@@ -1,8 +1,11 @@
 import MainPage from './pages/MainPage'
+import { OrdersProvider } from './context/ordersContext'
 
 function App() {
   return (
-    <MainPage />
+    <OrdersProvider>
+      <MainPage />
+    </OrdersProvider>
   );
 }
 

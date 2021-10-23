@@ -1,12 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import AddProduct from './AddProduct'
 import AddInfo from './AddInfo'
+import API from '../../utils/axiosUrl'
 import OrderList from './OrderList'
 import OrderPayment from './OrderPayment'
 import { Divider, Container, Button } from 'semantic-ui-react'
 
 export default function OrderDetail({ order }) {
     const [showInfo, setShowInfo] = useState('order')
+    const [myOrder, setMyOrder] = useState(null)
+    
+    const getOrder = async (id) => {
+        try {
+            const orderUpdated = await API.get(`/orders/${id}`)
+            if (orderUpdated) {
+                console.log(orderUpdated)
+                setMyOrder(orderUpdated.data)
+            }
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    useEffect( ()=> {
+        getOrder(order._id)
+    }, [order])
 
     return (
         <>
@@ -43,10 +61,14 @@ export default function OrderDetail({ order }) {
                 />
             </Button.Group>
             <Divider />
-            {showInfo === 'info' && <AddInfo order={order} />}
-            {showInfo === 'order'&& <OrderList order={order} />}
-            {showInfo === 'add' && <AddProduct order={order} />}
-            {showInfo === 'payment' && <OrderPayment order={order} /> }
+            {myOrder === null ? 'loading' :
+                <>
+                    {showInfo === 'info' && <AddInfo order={myOrder} />}
+                    {showInfo === 'order'&& <OrderList order={myOrder} />}
+                    {showInfo === 'add' && <AddProduct order={myOrder} />}
+                    {showInfo === 'payment' && <OrderPayment order={myOrder} /> }
+                </>
+            }
         </Container>
         </>
     )

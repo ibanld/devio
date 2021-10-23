@@ -4,6 +4,7 @@ import LoginForm from '../components/LoginForm'
 import WaiterPage from './WaiterPage'
 import SelectViewModal from '../components/SelectViewModal'
 import { io } from "socket.io-client"
+import { useOrders, useDispatchOrders } from '../context/ordersContext'
 import { Container } from 'semantic-ui-react'
 
 export default function MainPage(){
@@ -12,7 +13,9 @@ export default function MainPage(){
     const [open, setOpen] = useState(false)
     //Placeholder values
     const [tables, setTables] = useState([1,2,3,4,5,6,7,8,9,10,11,12,13])
-    const [orders, setOrders] = useState([])
+
+    const { orders } = useOrders()
+    const dispatchOrders = useDispatchOrders()
 
     useEffect( ()=> {
         if(user !== null){
@@ -26,8 +29,10 @@ export default function MainPage(){
 
     useEffect( () => {
         socket.once("orders", (arg) => { 
-            setOrders(arg)
-            console.log(arg)
+            dispatchOrders({
+                type: 'LOAD_ORDERS',
+                payload: arg
+            })
         })
     }, [orders])
 
@@ -38,7 +43,7 @@ export default function MainPage(){
             {setView === null || user === null &&
                 <LoginForm setUser={setUser} /> 
             }
-            {view === 'room' && <WaiterPage user={user} orders={orders} tables={tables} />}
+            {view === 'room' && <WaiterPage user={user} tables={tables} />}
             {view === 'kitchen' && <h1>kitchen</h1>}
             {view === 'admin' && <h1>Admin</h1>}
         </Container>
