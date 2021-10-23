@@ -380,7 +380,7 @@ function AdminPage({ setTables }) {
                 </Menu>
             </div>
             {activeItem === 'menu' && <ProductsList products={products} setReload={setReload} />}
-            {activeItem === 'employees' && <UsersList users={users} />}
+            {activeItem === 'employees' && <UsersList users={users} setReload={setReload} />}
             {activeItem === 'tables' && 
                 <>
                     <Input 
