@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import API from '../utils/axiosUrl'
 import { useDispatchOrders } from '../context/ordersContext'
+import { useDispatchAlert } from '../context/alertsContenxt'
 import { Card, Button, Input } from 'semantic-ui-react'
 
 export default function LoginForm({ setView }) {
@@ -10,6 +11,7 @@ export default function LoginForm({ setView }) {
     })
 
     const dispatchOrders = useDispatchOrders()
+    const dispatchAlert = useDispatchAlert()
 
     const handleChange = e => {
         setUserForm({
@@ -32,6 +34,17 @@ export default function LoginForm({ setView }) {
                         type: 'CURRENT_ORDERS'
                     })
                     setView(data.role)  
+                } else {
+                    dispatchAlert({
+                        type: 'SHOW_ALERT',
+                        payload: {
+                            icon:'info',
+                            header: 'Algo nao deu certo!',
+                            content: message,
+                            positive: false
+                        }
+                    })
+                    setTimeout( ()=> dispatchAlert({type:'HIDE_ALERT'}) , 3000)
                 }
             }
         } catch (err) {

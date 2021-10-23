@@ -7,8 +7,9 @@ function Alert() {
     const {icon, header, content, showMe, positive} = alert
 
     return (
-        <div style={{position: 'absolute', zIndex: 999, width: '100vw'}}>
-            <Transition visible={showMe} animation='scale' duration='1000' >
+        <>
+        <Transition visible={showMe} animation='scale' duration='1000' >
+            <div style={{position: 'absolute', zIndex: 999, width: '100vw', top: '0'}}>
                 <Message 
                     icon={icon}
                     header={header}
@@ -16,8 +17,9 @@ function Alert() {
                     positive={positive}
                     negative={!positive}
                 />
-            </Transition>
-        </div>
+            </div>
+        </Transition>
+        </>
     )
 }
 
