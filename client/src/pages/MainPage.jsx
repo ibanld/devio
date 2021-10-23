@@ -8,6 +8,7 @@ import SelectViewModal from '../components/SelectViewModal'
 import { io } from "socket.io-client"
 import { useOrders, useDispatchOrders } from '../context/ordersContext'
 import { Container } from 'semantic-ui-react'
+import AdminPage from './AdminPage'
 
 export default function MainPage(){
     const [view, setView] = useState(null)
@@ -49,7 +50,7 @@ export default function MainPage(){
                 <>
                 {view === 'room' && <WaiterPage tables={tables} />}
                 {view === 'kitchen' && <KitchenPage />}
-                {view === 'admin' && <h1>Admin</h1>}
+                {view === 'admin' && <AdminPage setTables={setTables} />}
                 </>
             } 
         </Container>
