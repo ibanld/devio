@@ -267,6 +267,9 @@ const UsersList = ({ users, setReload }) => {
                     <Form.Input label="Nome" placeholder="Digite o nome completo" value={userForm.fullName} name="fullName" required onChange={e => handleChange(e) } />
                 </Form.Group>
                 <Form.Group>
+                    {!edit && 
+                        <Form.Input label="Senha" placeholder="Digite a senha para novo Usuàrio" value={userForm.password} name="password" required onChange={e => handleChange(e) } />
+                    }
                     <select required name="family" value={userForm.role} onChange={ e => setUserForm({...userForm, role: e.target.value})}>
                         <option value="room">Sala</option>
                         <option value="kitchen">Cozinha</option>
