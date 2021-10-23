@@ -70,7 +70,6 @@ export default function TableList({ tables }) {
 
 
     useEffect( ()=> {
-        
         const busyTables = []
         const emptyTables = []
         const currentOrders = orders.filter(order => !order.payment)
