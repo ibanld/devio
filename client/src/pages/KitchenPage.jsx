@@ -10,7 +10,7 @@ export default function KitchenPage() {
     useEffect( ()=> {
         if (orders.length > 0) {
             const getProducts = []
-            orders.map( order => order.products.map( product => getProducts.push({_id: order._id, customer: order.customer, waiter: order.waiter, table: order.table, ...product})))
+            orders.map( order => order.products.map( product => getProducts.push({_id: order._id, customer: order.customer, table: order.table, ...product})))
             if (getProducts.length > 0) {
                 const pending = getProducts.filter( product => !product.ready)
                 setProducts(pending)
@@ -35,7 +35,7 @@ export default function KitchenPage() {
                         type="button"
                         fluid
                         size="massive"
-                        content={`Mesa ${product.table} de ${product.customer} || ${product.item.toUpperCase()} || Quantidade: ${product.qty} || Pegar por: ${product.waiter}`}
+                        content={`Mesa ${product.table} de ${product.customer} || ${product.item.toUpperCase()} || Quantidade: ${product.qty}`}
                         color="green"
                         onClick={ ()=> handleReady()}
                     /> 

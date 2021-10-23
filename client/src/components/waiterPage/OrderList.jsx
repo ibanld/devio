@@ -1,10 +1,11 @@
+import { useState, useEffect } from 'react'
 import API from '../../utils/axiosUrl'
 import requestUpdate from '../../utils/socketUpdate'
 import { useOrders } from '../../context/ordersContext'
 import { Table, Button } from 'semantic-ui-react'
 
 export default function OrderList() {
-
+    const [thisOrder, setThisOrder] = useState({})
     const { order } = useOrders()
 
     const handleDelete = async id => {
@@ -19,10 +20,14 @@ export default function OrderList() {
         }
     }
 
+    useEffect( ()=> {
+        setThisOrder(order)
+    }, [order])
+
     return (
         <>
-        <h5>Mesa {order.table} > R$ {parseFloat(order.total)} > Para {order.customer}</h5>  
-        {order.hasOwnProperty('products') && 
+        <h5>Mesa {thisOrder.table} > R$ {parseFloat(thisOrder.total)} > Para {thisOrder.customer} || {thisOrder.comment} </h5>  
+        {thisOrder.hasOwnProperty('products') && 
             <Table selectable singleLine unstackable>
                 <Table.Header>
                     <Table.Row>
@@ -44,8 +49,8 @@ export default function OrderList() {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {order.products.length > 0 &&
-                        order.products.map( product => 
+                    {thisOrder.products.length > 0 &&
+                        thisOrder.products.map( product => 
                             <Table.Row key={product._id} positive={product.ready}>
                                 <Table.Cell>({product.ref}){product.item}</Table.Cell>
                                 <Table.Cell>R$ {product.price}</Table.Cell>
