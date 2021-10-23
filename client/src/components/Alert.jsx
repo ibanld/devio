@@ -8,17 +8,19 @@ function Alert() {
 
     return (
         <>
-        <Transition visible={showMe} animation='scale' duration='1000' >
+        {showMe &&
             <div style={{position: 'absolute', zIndex: 999, width: '100vw', top: '0'}}>
-                <Message 
-                    icon={icon}
-                    header={header}
-                    content={content}
-                    positive={positive}
-                    negative={!positive}
-                />
+            <Transition visible={showMe} animation='scale' duration='1000' >
+                    <Message 
+                        icon={icon}
+                        header={header}
+                        content={content}
+                        positive={positive}
+                        negative={!positive}
+                    />
+            </Transition>
             </div>
-        </Transition>
+        }
         </>
     )
 }
