@@ -8,8 +8,6 @@ function WaiterPage({ tables }) {
 
     const { myOrders } = useOrders()
 
-    // const myOrders = orders.filter( order => order.waiter === user.user )
-
     return (
         <div>
             <TableList tables={tables} />

@@ -2,6 +2,7 @@ import React from 'react'
 import API from '../../utils/axiosUrl'
 import { Button } from 'semantic-ui-react'
 import requestUpdate from '../../utils/socketUpdate'
+import { useOrders, useDispatchOrders } from '../../context/ordersContext'
 
 const styles = {
     width: '100vw',
@@ -10,10 +11,13 @@ const styles = {
     overflowX: 'scroll'
 }
 
-export default function TableList({ orders, order, setOrder, tables, userOrders }) {
+export default function TableList({ tables }) {
+
+    const { orders, myOrders, order } = useOrders()
+    const dispatchOrders = useDispatchOrders()
 
     const getTableStatus = tableNumber => {
-        if(orders.filter( order => order.table === tableNumber).length < 1 || userOrders.filter( order => order.table === tableNumber ).length > 0)  {
+        if(orders.filter( order => order.table === tableNumber).length < 1 || myOrders.filter( order => order.table === tableNumber ).length > 0)  {
             return true
         } else {
             return false
@@ -23,7 +27,7 @@ export default function TableList({ orders, order, setOrder, tables, userOrders 
     const getTableColor = tableNumber => {
         if (orders.filter( order => order.table === tableNumber).length < 1) {
             return 'green'
-        } else if (userOrders.filter( order => order.table === tableNumber ).length > 0) {
+        } else if (myOrders.filter( order => order.table === tableNumber ).length > 0) {
             return 'blue'
         } else {
             return 'red'
@@ -35,7 +39,25 @@ export default function TableList({ orders, order, setOrder, tables, userOrders 
             const addOrder = await API.post('/orders', {...order, table: tableNumber})
             if (addOrder) {
                 requestUpdate()
-                setOrder(addOrder.data.data)
+                dispatchOrders({
+                    type: '',
+                    payload: addOrder.data.data
+                })
+            }
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    const loadOrder = async id => {
+        try {
+            const getOrder = await API.get(`/orders/${id}`)
+            if (getOrder) {
+                console.log(getOrder)
+                dispatchOrders({
+                    type: '',
+                    payload: getOrder
+                })
             }
         } catch (err) {
             console.error(err)
@@ -45,10 +67,16 @@ export default function TableList({ orders, order, setOrder, tables, userOrders 
     const handleTableSelect = table => {
         const myOrder = orders.filter( order => order.table === table)
         if(myOrder.length > 0) {
-            setOrder(myOrder[0])
+            const id = myOrder[0]._id
+            loadOrder(id)
         } else {
-            setOrder({ ...order, table: table })
-            createOrder(table)
+            dispatchOrders({
+                type: '',
+                payload: { ...order, table: table }
+            })
+            if (order.table !== null) {
+                createOrder(table)
+            }
         }
     }
 

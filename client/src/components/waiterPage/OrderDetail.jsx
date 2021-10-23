@@ -7,7 +7,7 @@ import OrderPayment from './OrderPayment'
 import { Divider, Container, Button } from 'semantic-ui-react'
 import { useDispatchOrders, useOrders } from '../../context/ordersContext'
 
-export default function OrderDetail({ selectedOrder }) {
+export default function OrderDetail() {
     const [showInfo, setShowInfo] = useState('order')
     
     const { order } = useOrders()
