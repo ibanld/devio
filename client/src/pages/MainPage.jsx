@@ -13,7 +13,7 @@ export default function MainPage(){
     //Placeholder values
     const [tables, setTables] = useState([1,2,3,4,5,6,7,8,9,10,11,12,13])
 
-    const { orders, logged } = useOrders()
+    const { orders, logged, user } = useOrders()
     const dispatchOrders = useDispatchOrders()
 
 
@@ -28,16 +28,31 @@ export default function MainPage(){
         })
     }, [orders])
 
+    useEffect(() => {   
+        if (logged) {
+            const myOrders = orders.filter( order => order.waiter === user.user )
+            const currentOrders = myOrders.filter( order => order.payment === false)
+            if (currentOrders.length > 0) {
+                dispatchOrders({
+                    type: 'CURRENT_ORDERS',
+                    payload: currentOrders
+                })
+            }
+        }
+    }, [logged])
+
     return (
         <>
         <Navbar setOpen={setOpen} setView={setView} />
         <Container fluid>
-            {!logged &&
-                <LoginForm setView={setView} /> 
-            }
-            {view === 'room' && <WaiterPage tables={tables} />}
-            {view === 'kitchen' && <h1>kitchen</h1>}
-            {view === 'admin' && <h1>Admin</h1>}
+            {!logged ?
+                <LoginForm setView={setView} /> :
+                <>
+                {view === 'room' && <WaiterPage tables={tables} />}
+                {view === 'kitchen' && <h1>kitchen</h1>}
+                {view === 'admin' && <h1>Admin</h1>}
+                </>
+            } 
         </Container>
         <SelectViewModal open={open} setOpen={setOpen} setView={setView}/>
         </>

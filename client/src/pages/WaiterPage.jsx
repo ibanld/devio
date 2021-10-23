@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import TableList from '../components/waiterPage/TableList'
 import InfoPanel from '../components/waiterPage/InfoPanel'
 import { useOrders } from '../context/ordersContext'

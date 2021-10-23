@@ -44,10 +44,17 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 order: {
                     ...state.order,
-                    user: payload,
                     waiter: payload.user,
-                    logged: true
-                }
+                },
+                user: payload,
+                logged: true
+            }
+        case 'LOG_OUT':
+            return {
+                ...state,
+                loading: false,
+                logged: false,
+                user: {}
             }
         default:
             throw new Error(`Unknown action: ${action.type}`)

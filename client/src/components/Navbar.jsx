@@ -1,16 +1,22 @@
 import { Menu, Icon, Button } from 'semantic-ui-react'
+import { useOrders, useDispatchOrders } from '../context/ordersContext'
 
-export default function Navbar({ user, setUser, setOpen, setView }) {
+export default function Navbar({ setOpen, setView }) {
+
+    const { user, logged } = useOrders()
+    const dispatchOrder = useDispatchOrders()
 
     const handleLogout = () => {
         setView(null)
-        setUser(null)
+        dispatchOrder({
+            type: 'LOG_OUT'
+        })    
     }
 
     return (
         <Menu inverted>
             <Menu.Item>Ristorante Cinque Terre</Menu.Item>
-            {user !== null && 
+            {logged && 
                 <Menu.Menu position="right">
                     <Menu.Item onClick={ () => setOpen(true)}>
                         <Icon

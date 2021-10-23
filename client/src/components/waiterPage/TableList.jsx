@@ -40,7 +40,7 @@ export default function TableList({ tables }) {
             if (addOrder) {
                 requestUpdate()
                 dispatchOrders({
-                    type: '',
+                    type: 'LOAD_ORDER',
                     payload: addOrder.data.data
                 })
             }
@@ -53,9 +53,8 @@ export default function TableList({ tables }) {
         try {
             const getOrder = await API.get(`/orders/${id}`)
             if (getOrder) {
-                console.log(getOrder)
                 dispatchOrders({
-                    type: '',
+                    type: 'LOAD_ORDER',
                     payload: getOrder
                 })
             }
@@ -71,7 +70,7 @@ export default function TableList({ tables }) {
             loadOrder(id)
         } else {
             dispatchOrders({
-                type: '',
+                type: 'LOAD_ORDER',
                 payload: { ...order, table: table }
             })
             if (order.table !== null) {

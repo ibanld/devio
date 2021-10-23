@@ -13,25 +13,6 @@ export default function OrderDetail() {
     const { order } = useOrders()
     const dispatchOrders = useDispatchOrders()
 
-    const getOrder = async (id) => {
-        try {
-            const loadOrder = await API.get(`/orders/${id}`)
-            if (loadOrder) {
-                dispatchOrders({
-                    type: 'LOAD_ORDER',
-                    payload: loadOrder
-                })
-                
-            }
-        } catch (err) {
-            console.error(err)
-        }
-    }
-
-    useEffect( ()=> {
-        getOrder(order._id)
-    }, [order])
-
     return (
         <>
         <Divider />
@@ -67,12 +48,12 @@ export default function OrderDetail() {
                 />
             </Button.Group>
             <Divider />
-            {myOrder === null ? 'loading' :
+            {order.table === null ? 'loading' :
                 <>
-                    {showInfo === 'info' && <AddInfo order={myOrder} />}
-                    {showInfo === 'order'&& <OrderList order={myOrder} />}
-                    {showInfo === 'add' && <AddProduct order={myOrder} />}
-                    {showInfo === 'payment' && <OrderPayment order={myOrder} /> }
+                    {showInfo === 'info' && <AddInfo order={order} />}
+                    {showInfo === 'order'&& <OrderList order={order} />}
+                    {showInfo === 'add' && <AddProduct order={order} />}
+                    {showInfo === 'payment' && <OrderPayment order={order} /> }
                 </>
             }
         </Container>
