@@ -33,8 +33,8 @@ const PORT = process.env.PORT || 5000
 // Abrimos conexao com o banco de dados
 dbConnect()
 
-// Abrimos socket para conxao com o cliente
-io.on("connection", (socket) => { 
+// Abrimos socket para conexao com o cliente
+io.once("connection", (socket) => { 
     const broadcast = async () =>  {
         try {
             const getOrder = await findAll()
@@ -46,10 +46,12 @@ io.on("connection", (socket) => {
         }
     }
     broadcast()
-    socket.once("updateOrder", () => {
+    socket.once("getOrders", () => {
         broadcast()
+        console.log('Orders updated Sent')
     })
 })
+
 
 // Rotas do API
 app.use('/api/orders', require('./routes/api/order.router'))

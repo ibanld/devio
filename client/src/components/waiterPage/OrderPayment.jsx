@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import API from '../../utils/axiosUrl'
+import { useDispatchOrders } from '../../context/ordersContext'
 import requestUpdate from '../../utils/socketUpdate'
 import { Button, Input, Divider } from 'semantic-ui-react'
 
 export default function OrderPayment({ order }) {
     const [cashPayment, setCashPayment] = useState(false)
     const [cash, setCash] = useState(0)
+    const [paymentComplete, setPaymentComplete] = useState(false)
+
+    const dispatchOrders = useDispatchOrders()
 
     const handlePayment = async () => {
         try {
@@ -13,6 +17,11 @@ export default function OrderPayment({ order }) {
             if(placePayment) {
                 setCash(0)
                 requestUpdate()
+                setPaymentComplete(true)
+                dispatchOrders({
+                    type: 'LOAD_ORDER',
+                    payload: {}
+                })
                 console.log(placePayment.data)
             }
         } catch (err) {
@@ -61,6 +70,7 @@ export default function OrderPayment({ order }) {
                 size="large"
                 icon="thumbs up"
                 content="Fazer Pagamento"
+                disabled={paymentComplete}
                 onClick={handlePayment}
             />
         </div>

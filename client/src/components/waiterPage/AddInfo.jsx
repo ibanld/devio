@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import API from '../../utils/axiosUrl'
+import { useDispatchOrders } from '../../context/ordersContext'
 import requestUpdate from '../../utils/socketUpdate'
 import { Form, Divider, Button } from 'semantic-ui-react'
-
 export default function AddInfo({ order }) {
     const [form, setForm] = useState({
         customer: order.customer,
         comment: order.comment
     })
+
+    const dispatchOrders = useDispatchOrders()
 
     const handleChange = e => {
         setForm({
@@ -22,6 +24,13 @@ export default function AddInfo({ order }) {
             const updateOrder = await API.put(`/orders/${order._id}`, {type: 'UPDATE_INFO', data: form})
             if (updateOrder) {
                 requestUpdate()
+                dispatchOrders({
+                    type: 'LOAD_ORDER',
+                    payload: {
+                        ...order,
+                        ...updateOrder.data.data
+                    }
+                })
             }
         } catch (err) {
             console.error(err)
@@ -32,7 +41,7 @@ export default function AddInfo({ order }) {
         try {
             const delItem = await API.delete(`/orders/${id}`)
             if (delItem) {
-                console.log(delItem.data.message)
+                
             }
         } catch (err) {
             console.error(err)

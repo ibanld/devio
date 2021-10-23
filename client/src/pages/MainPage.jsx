@@ -17,7 +17,6 @@ export default function MainPage(){
     const { orders, logged } = useOrders()
     const dispatchOrders = useDispatchOrders()
 
-
     const socket = io("http://localhost:5000")
 
     useEffect( () => {
@@ -26,6 +25,7 @@ export default function MainPage(){
                 type: 'LOAD_ORDERS',
                 payload: arg
             })
+            
         })
     }, [orders])
 
