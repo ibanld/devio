@@ -1,6 +1,7 @@
 import React from 'react'
 import API from '../../utils/axiosUrl'
 import { Button } from 'semantic-ui-react'
+import requestUpdate from '../../utils/socketUpdate'
 
 const styles = {
     width: '100vw',
@@ -33,6 +34,7 @@ export default function TableList({ orders, order, setOrder, tables, userOrders 
         try {
             const addOrder = await API.post('/orders', {...order, table: tableNumber})
             if (addOrder) {
+                requestUpdate()
                 setOrder(addOrder.data.data)
             }
         } catch (err) {

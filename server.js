@@ -4,12 +4,11 @@ const bodyParser = require('body-parser')
 const { createServer } = require("http")
 const { Server } = require("socket.io")
 const { dbConnect } = require('./config/db')
-const orders = require('./controllers/order.controller')
+const { findAll } = require('./socketEvents/order.events')
 
 // Criamos servidor de Express e httpServer
 const app = express()
 const httpServer = createServer(app)
-
 
 // Iniciamos CORS
 app.use(cors())
@@ -35,10 +34,24 @@ const PORT = process.env.PORT || 5000
 dbConnect()
 
 // Abrimos socket para conxao com o cliente
-io.on("connection", (socket) => {  
-    console.log(`Connected with client ${socket.id}`)
-    //const loadOrders = orders.findAll()
-    socket.emit('Hello World')
+io.on("connection", (socket) => { 
+    let data
+    const broadcast = async () =>  {
+        try {
+            const getOrder = await findAll()
+            if (getOrder) {
+                data = [...getOrder]
+                socket.broadcast.emit("orders", data)
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    
+    socket.on("updateOrder", () => {
+        console.log('Update')
+        broadcast()
+    })
 })
 
 // Rotas do API
