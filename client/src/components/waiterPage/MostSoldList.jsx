@@ -8,10 +8,13 @@ import getColor from '../../utils/getColor'
 export default function MostSoldList({ products, order }) {
     const [mostSold, setMostSold] = useState([])
 
+    // Alert dispatcher for context (redux alike) 
     const dispatchAlert = useDispatchAlert()
 
+    // Function to add product by updating ORDER calling API endpoint
     const handleAdd = async product => {
         try {
+            // Set product status as false when adding
             const putIntoOrder = {
                 type: 'ADD_PRODUCT',
                 product: {...product, ready: false, qty: 1}
@@ -37,6 +40,7 @@ export default function MostSoldList({ products, order }) {
         }
     }
 
+    // Filter most sold products when component mount and products update
     useEffect( ()=> {
         const myProducts = products.filter( product => product.sold > 5).slice(0, 9)
         setMostSold(myProducts)
