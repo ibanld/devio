@@ -8,6 +8,7 @@ import { Divider } from 'semantic-ui-react'
 export default function AddProduct({ order }) {
     const [products, setProducts] = useState([])
 
+    // Load products from API products endpoint
     const loadProducts = async () => {
         try {
             const getProducts = await API.get('/products')
@@ -20,6 +21,7 @@ export default function AddProduct({ order }) {
         }
     }
 
+    // Call function to load products on component mount
     useEffect(() => {
         loadProducts()        
     }, [])
