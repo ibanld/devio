@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import API from '../../utils/axiosUrl'
 import { useDispatchOrders } from '../../context/ordersContext'
 import { useDispatchAlert } from '../../context/alertsContenxt'
-import requestUpdate from '../../utils/socketUpdate'
+import requestRefresh from '../../utils/socketUpdate'
 import { Button, Input, Divider } from 'semantic-ui-react'
 
 export default function OrderPayment({ order }) {
@@ -18,7 +18,7 @@ export default function OrderPayment({ order }) {
             const placePayment = await API.put(`/orders/${order._id}`, {type: 'PAYMENT_DONE', paymentMethod: cashPayment, paymentChange: cashPayment ? cash - order.total : 0})
             if(placePayment) {
                 setCash(0)
-                requestUpdate()
+                requestRefresh()
                 setPaymentComplete(true)
                 dispatchOrders({
                     type: 'LOAD_ORDER',
