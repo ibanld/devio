@@ -4,6 +4,7 @@ import { useDispatchOrders } from '../../context/ordersContext'
 import { useDispatchAlert } from '../../context/alertsContenxt'
 import requestRefresh from '../../utils/socketUpdate'
 import { Form, Divider, Button } from 'semantic-ui-react'
+
 export default function AddInfo({ order }) {
     const [form, setForm] = useState({
         customer: order.customer,
@@ -54,6 +55,10 @@ export default function AddInfo({ order }) {
             const delItem = await API.delete(`/orders/${id}`)
             if (delItem) {
                 requestRefresh()
+                dispatchOrders({
+                    type: 'LOAD_ORDER',
+                    payload: {}
+                })
             }
         } catch (err) {
             console.error(err)
