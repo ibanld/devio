@@ -4,6 +4,7 @@ import { Button } from 'semantic-ui-react'
 import requestUpdate from '../../utils/socketUpdate'
 import { useOrders, useDispatchOrders } from '../../context/ordersContext'
 
+// CSS style for table component
 const styles = {
     width: '100vw',
     display: 'flex',
@@ -13,6 +14,7 @@ const styles = {
 
 export default function TableList({ tables }) {
     const [allTables, setAllTables] = useState([])
+    // New order form state component
     const newOrder = {
         customer: '',
         table: null,
@@ -20,10 +22,12 @@ export default function TableList({ tables }) {
         products: [],
         total: 0
     }
-
+    // Retrieve orders and user global state from Context provider
     const { orders, user } = useOrders()
+    // Orders dispatcher for context (redux alike) 
     const dispatchOrders = useDispatchOrders()
 
+    // Function to create new order when tapping on order number
     const createOrder = async tableNumber => {
         try {
             const addOrder = await API.post('/orders', {...newOrder, waiter: user.user, table: tableNumber})
@@ -44,6 +48,7 @@ export default function TableList({ tables }) {
         }
     }
 
+    // Load order when tapping on User filtered tables
     const loadOrder = async id => {
         try {
             const getOrder = await API.get(`/orders/${id}`)
@@ -59,6 +64,8 @@ export default function TableList({ tables }) {
         }
     }
     
+    // function to check if table is busy or not, if table has _id property load order
+    //  if doesnt have _id property create new order
     const handleTableSelect = isBusy => {
         if (isBusy._id){
             let id = isBusy._id
@@ -68,6 +75,7 @@ export default function TableList({ tables }) {
         }
     }
 
+    // User orders and tables list to filter tables and check which one are free, busy or belong to user
     useEffect( ()=> {
         const busyTables = []
         const emptyTables = []
