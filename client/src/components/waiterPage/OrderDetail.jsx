@@ -11,6 +11,7 @@ export default function OrderDetail() {
     const [showInfo, setShowInfo] = useState('order')
     const [myOrder, setMyOrder] = useState({})
 
+    // Get order and refresh status from global state context provider
     const { order, refresh } = useOrders()
     
     // Get Single Orders from API endpoint using ID from global context provider
@@ -25,6 +26,7 @@ export default function OrderDetail() {
         }
     }
 
+    // Reload order when socket server emits Re-Fetch command or order changes
     useEffect( ()=> loadOrder(order._id), [order, refresh])
 
     return (
