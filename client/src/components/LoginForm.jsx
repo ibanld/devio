@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import API from '../utils/axiosUrl'
 import { useDispatchOrders } from '../context/ordersContext'
 import { useDispatchAlert } from '../context/alertsContenxt'
-import { Card, Button, Input } from 'semantic-ui-react'
+import { Card, Button, Input, Image } from 'semantic-ui-react'
 
 export default function LoginForm({ setView }) {
     const [formUser, setUserForm] = useState({
@@ -54,6 +54,7 @@ export default function LoginForm({ setView }) {
 
     return (
         <Card centered>
+            <Image src='logo.png' wrapped />
             <Card.Content>
                 <Card.Header>
                     Acesso
