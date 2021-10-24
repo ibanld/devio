@@ -53,6 +53,7 @@ export default function MainPage(){
             console.log(err)
         }
     }
+    
     useEffect( ()=> {
         console.log('loaded')
         loadOrders()

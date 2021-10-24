@@ -8,9 +8,25 @@ import { Container, Header, Divider, Button } from 'semantic-ui-react'
 export default function KitchenPage() {
     // State to set pending orders individually
     const [products, setProducts] = useState([])
-    
+    const [orders, setOrders] = useState([])
+
     // Get orders from global state Context (redux alikes)
-    const { orders, refresh } = useOrders()
+    const { refresh } = useOrders()
+
+    // Get All Orders from API endpoint
+    const loadOrders = async () => {
+        try {
+            const getOrders = await API.get('/orders')
+            if (getOrders) {
+                setOrders(getOrders.data)
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    // Call orders loader every time refresh (socket server call) or orders are invoked
+    useEffect( ()=> loadOrders(), [refresh, orders])
 
     useEffect( ()=> {
         if (orders.length > 0) {
@@ -23,7 +39,7 @@ export default function KitchenPage() {
                 setProducts(pending)
             }
         }
-        // Update products everytime live server receives an update on ORDERS
+        // Update products everytime live server receives an update on ORDERS and socket emit the RE-Fetch order
     }, [orders, refresh])
 // Function to handle products when are ready
     const handleReady = async (product) => {
@@ -46,7 +62,7 @@ export default function KitchenPage() {
             <Divider />
             {products.length > 0 ?
                 products.map( product => 
-                    <div key={product.orderId}>
+                    <div key={product.orderId+product._id}>
                     <Button 
                         type="button"
                         fluid
