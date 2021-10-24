@@ -6,6 +6,7 @@ import { useDispatchAlert } from '../../context/alertsContenxt'
 import ProductConfirmModal from './ProductConfirmModal'
 import getColor from '../../utils/getColor'
 import { useDispatchOrders } from '../../context/ordersContext'
+import requestRefresh from '../../utils/socketUpdate'
 
 export default function ProductSearch({ products, order }) {
     const [selectedProduct, setSelectedProduct] = useState({})
@@ -42,7 +43,7 @@ export default function ProductSearch({ products, order }) {
             if (selectedProduct.qty > 0){
                 const putOrder = await API.put(`/orders/${order._id}`, putIntoOrder)
                 if (putOrder) {
-                    requestUpdate()
+                    requestRefresh()
                     setSelectedProduct({})
                     setOpen(false)
                     dispatchAlert({

@@ -56,7 +56,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                refresh: true
+                refresh: !state.refresh
             }
         default:
             throw new Error(`Unknown action: ${action.type}`)
