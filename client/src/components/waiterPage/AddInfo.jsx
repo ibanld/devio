@@ -11,9 +11,11 @@ export default function AddInfo({ order }) {
         comment: order.comment
     })
 
+    // Alert and Orders dispatcher for context (redux alike) 
     const dispatchOrders = useDispatchOrders()
     const dispatchAlert = useDispatchAlert()
 
+    // Function to handle controller form fields
     const handleChange = e => {
         setForm({
             ...form,
@@ -21,6 +23,7 @@ export default function AddInfo({ order }) {
         })
     }
 
+    // Update order Customer name and comment by calling ORDERS endpoint with PUT operation on API
     const handleSubmit = async e => {
         e.preventDefault()
         try {
@@ -50,6 +53,7 @@ export default function AddInfo({ order }) {
         }
     }
 
+    // Delete order by calling ORDER endpoint and set order global state to empty to show Info component
     const handleDelete = async id => {
         try {
             const delItem = await API.delete(`/orders/${id}`)
