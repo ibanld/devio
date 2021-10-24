@@ -15,7 +15,7 @@ export default function KitchenPage() {
         if (orders.length > 0) {
             const getProducts = []
             // Map though all orders and add products to array by mapping on products for each order
-            orders.map( order => order.products.map( product => getProducts.push({orderId: order._id, customer: order.customer, table: order.table, ...product})))
+            orders.map( order => order.products.map( product => getProducts.push({orderId: order._id, customer: order.customer, table: order.table, comment: order.comment, ...product})))
             if (getProducts.length > 0) {
                 // Filter all pending products
                 const pending = getProducts.filter( product => !product.ready)

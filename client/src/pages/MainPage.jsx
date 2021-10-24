@@ -26,25 +26,20 @@ export default function MainPage(){
     const socket = io("http://localhost:5000")
 
 
-    useEffect( () => {
-        socket.on("orders", (arg) => { 
-            console.log('socket listening')
-            dispatchOrders({
-                type: 'LOAD_ORDERS',
-                payload: arg
-            })
-            
-        })
-    }, [])
-    
-    useEffect(() => {   
-        // If user is logged-in, the context provider loads the pending orders for the loaded User
+    useEffect( ()=> {
         if (logged) {
+            socket.once("orders", (arg) => { 
+                console.log(arg)
+                dispatchOrders({
+                    type: 'LOAD_ORDERS',
+                    payload: arg
+                })    
+            })
             dispatchOrders({
                 type: 'CURRENT_ORDERS'
             })
         }
-    }, [logged])
+    }, [dispatchOrders, logged])
 
     return (
         <>

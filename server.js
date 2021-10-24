@@ -34,7 +34,7 @@ const PORT = process.env.PORT || 5000
 dbConnect()
 
 // Abrimos socket para conexao com o cliente
-io.once("connection", (socket) => { 
+io.on("connection", (socket) => { 
     const broadcast = async () =>  {
         try {
             const getOrder = await findAll()
