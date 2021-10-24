@@ -6,6 +6,7 @@ import WaiterPage from './WaiterPage'
 import KitchenPage from './KitchenPage'
 import SelectViewModal from '../components/SelectViewModal'
 import { io } from "socket.io-client"
+import API from '../utils/axiosUrl'
 import { useOrders, useDispatchOrders } from '../context/ordersContext'
 import { Container } from 'semantic-ui-react'
 import AdminPage from './AdminPage'
@@ -19,7 +20,7 @@ export default function MainPage(){
     const [tables, setTables] = useState([1,2,3,4,5,6,7,8,9,10,11,12,13])
 
 // Orders and log-in status from context state provider
-    const { orders, logged } = useOrders()
+    const { refresh, logged } = useOrders()
 // Order dispatcher for context state managment (redux alike) 
     const dispatchOrders = useDispatchOrders()
 // Connection to socket live server host    
@@ -28,18 +29,34 @@ export default function MainPage(){
 
     useEffect( ()=> {
         if (logged) {
-            socket.once("orders", (arg) => { 
-                console.log(arg)
+            socket.on("orders", () => { 
                 dispatchOrders({
-                    type: 'LOAD_ORDERS',
-                    payload: arg
+                    type: 'RE_FETCH'
                 })    
             })
             dispatchOrders({
                 type: 'CURRENT_ORDERS'
             })
         }
-    }, [dispatchOrders, logged])
+    }, [logged])
+
+    const loadOrders = async () => {
+        try {
+            const getOrders = await API.get('/orders')
+            if (getOrders) {
+                dispatchOrders({
+                    type: 'LOAD_ORDERS',
+                    payload: getOrders.data
+                })
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    useEffect( ()=> {
+        console.log('loaded')
+        loadOrders()
+    }, [refresh])
 
     return (
         <>

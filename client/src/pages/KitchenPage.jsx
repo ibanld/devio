@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import API from '../utils/axiosUrl'
-import requestUpdate from '../utils/socketUpdate'
 import { useOrders } from '../context/ordersContext'
+import requestRefresh from '../utils/socketUpdate'
+
 import { Container, Header, Divider, Button } from 'semantic-ui-react'
 
 export default function KitchenPage() {
     // State to set pending orders individually
     const [products, setProducts] = useState([])
-
+    
     // Get orders from global state Context (redux alikes)
-    const { orders } = useOrders()
+    const { orders, refresh } = useOrders()
 
     useEffect( ()=> {
         if (orders.length > 0) {
@@ -23,7 +24,7 @@ export default function KitchenPage() {
             }
         }
         // Update products everytime live server receives an update on ORDERS
-    }, [orders])
+    }, [orders, refresh])
 // Function to handle products when are ready
     const handleReady = async (product) => {
         const {orderId, _id} = product
@@ -32,7 +33,7 @@ export default function KitchenPage() {
             const orderComplete = await API.put(`/orders/${orderId}`, {type: 'PRODUCT_READY', productId: _id})
             if (orderComplete) {
                 // If success the socket will update the orders state in real time
-                requestUpdate()
+                requestRefresh()
             }
         } catch (err) {
             console.error(err)

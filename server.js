@@ -34,7 +34,13 @@ const PORT = process.env.PORT || 5000
 dbConnect()
 
 // Abrimos socket para conexao com o cliente
-io.on("connection", (socket) => { 
+io.on("connection", socket => {
+    socket.on("reFetch", () => {
+        socket.broadcast.emit("orders")
+    })
+})
+
+io.on("notactive", (socket) => { 
     const broadcast = async () =>  {
         try {
             const getOrder = await findAll()
@@ -47,7 +53,7 @@ io.on("connection", (socket) => {
     }
     broadcast()
     socket.once("getOrders", () => {
-        broadcast()
+       // broadcast()
         console.log('Orders updated Sent')
     })
 })

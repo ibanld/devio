@@ -9,7 +9,8 @@ const initialState = {
     user: {},
     myOrders: [],
     logged: false,
-    loading: true
+    loading: true,
+    refresh: false
 }
 
 const reducer = (state = initialState, action) => {
@@ -50,6 +51,12 @@ const reducer = (state = initialState, action) => {
                 loading: false,
                 logged: false,
                 user: {}
+            }
+        case 'RE_FETCH':
+            return {
+                ...state,
+                loading: false,
+                refresh: true
             }
         default:
             throw new Error(`Unknown action: ${action.type}`)
