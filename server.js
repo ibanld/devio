@@ -64,5 +64,15 @@ app.use('/api/orders', require('./routes/api/order.router'))
 app.use('/api/users', require('./routes/api/user.router'))
 app.use('/api/products', require('./routes/api/product.router'))
 
+// Servir arquivos estaticos em produçao
+if(process.env.NODE_ENV === 'production') {
+    
+    app.use(express.static('client/build'));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    })
+}
+
 // Iniciamos servidor
 httpServer.listen(PORT, () => console.log(`Express-Socket running at PORT: ${PORT}`))
