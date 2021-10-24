@@ -126,25 +126,22 @@ exports.updateOrder = async (req, res) => {
             case 'UPDATE_PRODUCT_QTY':
                 // Atualizar quantidade para produto no pedido
                 const pid = req.body.productId
-                const updatedTotal = req.body.total
+                const productQty = req.body.qty
 
                 const getProduct = order.products.find(product => product._id === pid)
                 const updatedProduct = {
                     ...getProduct,
-                    qty: req.body.qty
+                    qty: productQty
                 }
                 const removeProduct = order.products.filter( product => product._id !== pid)
                 removeProduct.push(updatedProduct)
                 const updtOrder = {
                     ...order.data,
                     products: removeProduct,
-                    total: updatedTotal,
-                    completed: getProduct.qty > req.body.qty ? true : false
+                    total: parseFloat(updatedProduct.price*productQty)
                 }
 
-                const completedStatus = getProduct.qty > req.body.qty ? true : false
-
-                const increaseQty = await Order.findByIdAndUpdate(id, { products: removeProduct, total: updatedTotal, completed: completedStatus })
+                const increaseQty = await Order.findByIdAndUpdate(id, updtOrder)
                 if (increaseQty) {
                     return res.send({ 
                         message: `Quantidade atualizada para ${getProduct.item}`,
