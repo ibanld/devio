@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import API from '../../utils/axiosUrl'
-import requestUpdate from '../../utils/socketUpdate'
+import requestRefresh from '../../utils/socketUpdate'
 import ProductSearch from './ProductSearch'
 import MostSoldList from './MostSoldList'
 import { Divider } from 'semantic-ui-react'
@@ -12,7 +12,7 @@ export default function AddProduct({ order }) {
         try {
             const getProducts = await API.get('/products')
             if (getProducts){
-                requestUpdate()
+                requestRefresh()
                 setProducts(getProducts.data.data)
             }
         } catch (err) {
@@ -28,7 +28,7 @@ export default function AddProduct({ order }) {
         <>
             <ProductSearch products={products} order={order} />
             <Divider />
-            <MostSoldList products={products} />
+            <MostSoldList products={products} order={order} />
         </>
     )
 }

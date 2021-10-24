@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import API from '../../utils/axiosUrl'
 import { useDispatchOrders } from '../../context/ordersContext'
 import { useDispatchAlert } from '../../context/alertsContenxt'
-import requestUpdate from '../../utils/socketUpdate'
+import requestRefresh from '../../utils/socketUpdate'
 import { Form, Divider, Button } from 'semantic-ui-react'
 export default function AddInfo({ order }) {
     const [form, setForm] = useState({
@@ -25,7 +25,7 @@ export default function AddInfo({ order }) {
         try {
             const updateOrder = await API.put(`/orders/${order._id}`, {type: 'UPDATE_INFO', data: form})
             if (updateOrder) {
-                requestUpdate()
+                requestRefresh()
                 dispatchOrders({
                     type: 'LOAD_ORDER',
                     payload: {

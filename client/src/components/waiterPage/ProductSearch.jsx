@@ -45,7 +45,6 @@ export default function ProductSearch({ products, order }) {
                     requestUpdate()
                     setSelectedProduct({})
                     setOpen(false)
-                    console.log(putOrder.data)
                     dispatchAlert({
                         type: 'SHOW_ALERT',
                         payload: {
