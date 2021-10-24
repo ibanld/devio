@@ -24,8 +24,7 @@ export default function MainPage(){
 // Order dispatcher for context state managment (redux alike) 
     const dispatchOrders = useDispatchOrders()
 // Connection to socket live server host    
-    const socket = io("http://localhost:5000")
-
+    const socket = io("https://cinqueterre.herokuapp.com")
 
     useEffect( ()=> {
         if (logged) {
@@ -55,7 +54,6 @@ export default function MainPage(){
     }
     
     useEffect( ()=> {
-        console.log('loaded')
         loadOrders()
     }, [refresh])
 

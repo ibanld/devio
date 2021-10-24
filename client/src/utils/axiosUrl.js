@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const API = axios.create({
-    baseURL: 'http://localhost:5000/api/',
+    baseURL: 'https://cinqueterre.herokuapp.com/api/',
     timeout: 4000
   });
 

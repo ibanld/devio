@@ -22,12 +22,12 @@ app.use(bodyParser.json())
 // Abrimos conexao com Socket.io
 const io = new Server(httpServer, {
     cors: { 
-        origin: "http://localhost:3000",    
+        origin: "https://cinqueterre.herokuapp.com",    
         methods: ["GET", "POST", "PUT"]  
     }
 })
 
-// Escolhemos PORT do host ou 3000
+// Escolhemos PORT do host ou 5000
 const PORT = process.env.PORT || 5000
 
 // Abrimos conexao com o banco de dados
