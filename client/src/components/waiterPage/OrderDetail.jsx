@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import AddProduct from './AddProduct'
+import API from '../../utils/axiosUrl'
 import AddInfo from './AddInfo'
 import OrderList from './OrderList'
 import OrderPayment from './OrderPayment'
@@ -8,9 +9,24 @@ import { useOrders } from '../../context/ordersContext'
 
 export default function OrderDetail() {
     const [showInfo, setShowInfo] = useState('order')
+    const [myOrder, setMyOrder] = useState({})
+
+    const { order, refresh } = useOrders()
     
-    const { order } = useOrders()
-    
+    // Get Single Orders from API endpoint using ID from global context provider
+    const loadOrder = async () => {
+        try {
+            const getOrder = await API.get(`/orders/${order._id}`)
+            if (getOrder) {
+                setMyOrder(getOrder.data)
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    useEffect( ()=> loadOrder(order._id), [order, refresh])
+
     return (
         <>
         <Divider />
@@ -48,10 +64,10 @@ export default function OrderDetail() {
             <Divider />
             {order.table === null ? 'loading' :
                 <>
-                    {showInfo === 'info' && <AddInfo order={order} />}
-                    {showInfo === 'order'&& <OrderList order={order} />}
-                    {showInfo === 'add' && <AddProduct order={order} />}
-                    {showInfo === 'payment' && <OrderPayment order={order} /> }
+                    {showInfo === 'info' && <AddInfo order={myOrder} />}
+                    {showInfo === 'order'&& <OrderList order={myOrder} />}
+                    {showInfo === 'add' && <AddProduct order={myOrder} />}
+                    {showInfo === 'payment' && <OrderPayment order={myOrder} /> }
                 </>
             }
         </Container>

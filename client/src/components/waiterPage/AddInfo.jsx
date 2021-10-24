@@ -53,7 +53,7 @@ export default function AddInfo({ order }) {
         try {
             const delItem = await API.delete(`/orders/${id}`)
             if (delItem) {
-                
+                requestRefresh()
             }
         } catch (err) {
             console.error(err)

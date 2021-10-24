@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react'
 import API from '../../utils/axiosUrl'
-import requestUpdate from '../../utils/socketUpdate'
 import { useDispatchAlert } from '../../context/alertsContenxt'
 import { useOrders } from '../../context/ordersContext'
 import { Table, Button } from 'semantic-ui-react'
+import requestRefresh from '../../utils/socketUpdate'
 
-export default function OrderList() {
-    const [thisOrder, setThisOrder] = useState({})
-    const { order } = useOrders()
+export default function OrderList({ order }) {
 
     const dispatchAlert = useDispatchAlert()
 
@@ -15,7 +13,7 @@ export default function OrderList() {
         try {
             const deleteProduct = await API.put(`/orders/${id}`, {type: 'DELETE_PRODUCT', productId: id})
             if (deleteProduct) {
-                requestUpdate()
+                requestRefresh()
                 dispatchAlert({
                     type: 'SHOW_ALERT',
                     payload: {
@@ -32,14 +30,10 @@ export default function OrderList() {
         }
     }
 
-    useEffect( ()=> {
-        setThisOrder(order)
-    }, [order])
-
     return (
         <>
-        <h5>Mesa {thisOrder.table} > R$ {parseFloat(thisOrder.total)} > Para {thisOrder.customer} || {thisOrder.comment} </h5>  
-        {thisOrder.hasOwnProperty('products') && 
+        <h5>Mesa {order.table} > R$ {parseFloat(order.total)} > Para {order.customer} || {order.comment} </h5>  
+        {order.hasOwnProperty('products') && 
             <Table selectable singleLine unstackable>
                 <Table.Header>
                     <Table.Row>
@@ -61,8 +55,8 @@ export default function OrderList() {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {thisOrder.products.length > 0 &&
-                        thisOrder.products.map( product => 
+                    {order.products.length > 0 &&
+                        order.products.map( product => 
                             <Table.Row key={product._id} positive={product.ready}>
                                 <Table.Cell>({product.ref}){product.item}</Table.Cell>
                                 <Table.Cell>R$ {product.price}</Table.Cell>
