@@ -1,21 +1,22 @@
 import React, { useState } from 'react'
 import API from '../../utils/axiosUrl'
 import { Input, Label } from 'semantic-ui-react'
-import requestUpdate from '../../utils/socketUpdate'
 import { useDispatchAlert } from '../../context/alertsContenxt'
 import ProductConfirmModal from './ProductConfirmModal'
 import getColor from '../../utils/getColor'
-import { useDispatchOrders } from '../../context/ordersContext'
 import requestRefresh from '../../utils/socketUpdate'
 
+// Product Search component
 export default function ProductSearch({ products, order }) {
     const [selectedProduct, setSelectedProduct] = useState({})
     const [searchedProducts, setSearchedProducts] = useState([])
     const [loadingSearch, setLoadingSearch] = useState(false)
     const [open, setOpen] = useState(false)
-    
+
+    // Alert dispatcher for context (redux alike) 
     const dispatchAlert = useDispatchAlert()
 
+    // Function to handle search: when user types it filters the products array
     const handleSearch = e => {
         setLoadingSearch(true)
         if (e.target.value.length >= 3) {
@@ -29,11 +30,13 @@ export default function ProductSearch({ products, order }) {
         }
     }
 
+    // Function to handle modal for adding product with different qty
     const handleOpenModal = product => {
         setSelectedProduct(product)
         setOpen(true)
     }
 
+    // Add product to order by calling ORDERS endpoint and doing a PUT operation
     const handleAddProduct = async () => {
         try {
             const putIntoOrder = {

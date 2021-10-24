@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react'
 import API from '../../utils/axiosUrl'
 import { useDispatchAlert } from '../../context/alertsContenxt'
 import { Table, Button } from 'semantic-ui-react'
 import requestRefresh from '../../utils/socketUpdate'
 
+// Order products list component
 export default function OrderList({ order }) {
 
+    // Alert dispatcher for context (redux alike) 
     const dispatchAlert = useDispatchAlert()
 
+    // Delete product from order updating on Order endpoint API
     const handleDelete = async id => {
         try {
             const deleteProduct = await API.put(`/orders/${order._id}`, {type: 'DELETE_PRODUCT', productId: id})
@@ -29,6 +31,7 @@ export default function OrderList({ order }) {
         }
     }
 
+    // Function to increase qty of product calling ORDERS endpoint
     const handleSumProduct = async product => {
         try {
             const addOne = await API.put(`/orders/${order._id}`, { type: 'UPDATE_PRODUCT_QTY',productId: product._id, qty: product.qty + 1 })
@@ -49,11 +52,12 @@ export default function OrderList({ order }) {
             console.error(err)
         }
     }
-
+    // Function to reduce qty of product calling ORDERS endpoint
     const handleRemoveOneProduct = async product => {
         try {
             const removeOne = await API.put(`/orders/${order._id}`, { type: 'UPDATE_PRODUCT_QTY', productId: product._id, qty: product.qty - 1 })
             if (removeOne) {
+                // If product quantity is less than one the product is removed from order
                 if (product.qty - 1 < 1){
                     handleDelete(product._id)
                 }
