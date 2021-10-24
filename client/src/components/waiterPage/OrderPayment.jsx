@@ -10,9 +10,11 @@ export default function OrderPayment({ order }) {
     const [cash, setCash] = useState(0)
     const [paymentComplete, setPaymentComplete] = useState(false)
 
+    // Alert and Orders dispatcher for context (redux alike)
     const dispatchOrders = useDispatchOrders()
     const dispatchAlert = useDispatchAlert()
 
+    // Function to handle payment by calling ORDERS endpoint and update payment status
     const handlePayment = async () => {
         try {
             const placePayment = await API.put(`/orders/${order._id}`, {type: 'PAYMENT_DONE', paymentMethod: cashPayment, paymentChange: cashPayment ? cash - order.total : 0})
